@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://json-schema.org/draft/2020-12/schema
+$title: Scenario semantic-salience diagnostics
+description: Task-specific contract for diagnostics in the scenario semantic-salience audit. Counts are descriptive discovery signals only and are never optimization targets.
+type: object
+required:
+  - before
+  - after
+  - note
+properties:
+  before:
+    $ref: '#/$defs/counts'
+  after:
+    oneOf:
+      - $ref: '#/$defs/counts'
+      - type: 'null'
+    description: Null during analysis; populated after the application pass.
+  note:
+    type: string
+    minLength: 1
+    description: Short reminder that lexical and structural counts are diagnostics only.
+$defs:
+  counts:
+    type: object
+    description: Audit-specific counts such as rather_than, should, not, do_not, without, instead, imperatives, or other discovery signals selected by the task prompt.
+    additionalProperties:
+      type: integer
+      minimum: 0

@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://json-schema.org/draft/2020-12/schema
+$id: scenario-semantic-salience.estimated-effect.schema.yaml
+$title: Scenario semantic-salience estimated effect
+description: >
+  Task-specific contract for summary.estimated_effect in the scenario
+  semantic-salience audit.
+type: object
+additionalProperties: false
+required:
+  - llm_facing_words_removed
+  - words_moved_to_annotations
+properties:
+  llm_facing_words_removed:
+    type: integer
+    minimum: 0
+    description: >
+      Approximate number of words expected to disappear from the generator-facing
+      scenario if the currently recommended edits are applied.
+  words_moved_to_annotations:
+    type: integer
+    minimum: 0
+    description: >
+      Approximate number of words expected to remain in the annotated source but
+      move from ordinary generator-facing text into author-facing annotations.
