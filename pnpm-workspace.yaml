@@ -1,0 +1,2 @@
+overrides:
+  '@tempalace/core': link:../tempalace/packages/core
