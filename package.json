@@ -1,17 +1,54 @@
 {
   "name": "semantic-audit",
   "version": "1.0.0",
-  "description": "",
+  "description": "Composable semantic audit, decision, and application workflows for LLM-assisted review",
+  "type": "module",
+  "packageManager": "pnpm@11.20.0",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./tasks": {
+      "types": "./dist/src/tasks/index.d.ts",
+      "import": "./dist/src/tasks/index.js"
+    },
+    "./registry": {
+      "types": "./dist/src/registry.d.ts",
+      "import": "./dist/src/registry.js"
+    }
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "tsc -p tsconfig.test.json && node --test .test-build/test/*.test.js",
+    "check": "pnpm run typecheck && pnpm run test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "dependencies": {
     "@tempalace/core": "link:../tempalace/packages/core",
     "yaml": "^2.9.1",
     "zod": "^4.6.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "prettier": "^3.9.6",
+    "typescript": "^5.9.3"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "tabWidth": 2,
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "bracketSameLine": true,
+    "trailingComma": "es5"
   }
 }

@@ -9,10 +9,12 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
+    "rootDir": ".",
+    "outDir": "dist",
     "skipLibCheck": true,
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     "verbatimModuleSyntax": true
-  }
+  },
+  "include": ["src/**/*.ts", "templates.ts"],
+  "exclude": ["test", "dist", ".test-build"]
 }
