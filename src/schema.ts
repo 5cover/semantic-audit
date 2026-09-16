@@ -1,7 +1,7 @@
 import * as z from 'zod';
 import type { AuditTaskDefinition } from './types.js';
 
-const locationSchema = z.strictObject({
+const locationSchema = z.object({
   file: z.string().min(1),
   section: z.string().min(1),
   anchor: z.string().min(1).optional(),
@@ -12,7 +12,7 @@ const locationSchema = z.strictObject({
 const executionSchema = z
   .union([
     z.null(),
-    z.strictObject({
+    z.object({
       outcome: z.enum(['applied', 'kept', 'blocked']),
       note: z.string().min(1),
     }),
@@ -28,7 +28,7 @@ export function createAuditSchemas(definition: AuditTaskDefinition) {
   const optionId = z.string().regex(/^[A-Z]$/);
   const action = z.enum(definition.actions);
 
-  const optionSchema = z.strictObject(
+  const optionSchema = z.object(
     withOptionalPayload(
       {
         action,
@@ -40,7 +40,7 @@ export function createAuditSchemas(definition: AuditTaskDefinition) {
     )
   );
 
-  const findingSchema = z.strictObject(
+  const findingSchema = z.object(
     withOptionalPayload(
       {
         title: z.string().min(1).optional(),
@@ -66,10 +66,10 @@ export function createAuditSchemas(definition: AuditTaskDefinition) {
     )
   );
 
-  const summarySchema = z.strictObject(
+  const summarySchema = z.object(
     withOptionalPayload(
       {
-        findings: z.strictObject({
+        findings: z.object({
           total: z.int().min(0),
           decided: z.int().min(0),
           open: z.int().min(0),
@@ -82,12 +82,11 @@ export function createAuditSchemas(definition: AuditTaskDefinition) {
     )
   );
 
-  const structuralSchema = z.strictObject({
-    version: z.literal(1),
-    task: z.strictObject(withOptionalPayload({ id: z.literal(definition.id) }, schemas.taskPayload)),
+  const structuralSchema = z.object({
+    task: z.object(withOptionalPayload({ id: z.literal(definition.id) }, schemas.taskPayload)),
     sources: z
       .array(
-        z.strictObject({
+        z.object({
           file: z.string().min(1),
           role: z.enum(['target', 'reference']),
           description: z.string().min(1).optional(),

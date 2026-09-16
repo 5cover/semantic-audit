@@ -81,10 +81,20 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
 ): AuditTask<SupportedDecisionMode<Definition>> {
   validateDefinition(definition);
   const { structuralSchema, auditSchema } = createAuditSchemas(definition);
-  const auditJsonSchema = z.toJSONSchema(structuralSchema, { target: 'draft-2020-12', reused: 'inline' }) as Record<
-    string,
-    unknown
-  >;
+  const auditJsonSchema = z.toJSONSchema(structuralSchema, {
+    target: 'draft-2020-12',
+    reused: 'inline',
+    override: ctx => {
+    
+      if (
+        ctx.jsonSchema.type === 'integer' ||
+        (Array.isArray(ctx.jsonSchema.type) && ctx.jsonSchema.type.includes('integer'))
+      ) {
+        if (ctx.jsonSchema.minimum === Number.MIN_SAFE_INTEGER) delete ctx.jsonSchema.minimum;
+        if (ctx.jsonSchema.maximum === Number.MAX_SAFE_INTEGER) delete ctx.jsonSchema.maximum;
+      }
+    },
+  }) as Record<string, unknown>;
   auditJsonSchema.$title = `${definition.name} audit`;
   auditJsonSchema.description = `Structured audit for the ${definition.name} task.`;
 

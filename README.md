@@ -125,7 +125,6 @@ export const terminologyAudit = defineAuditTask({
     ],
   },
   exampleAudit: {
-    version: 1,
     task: { id: 'terminology-audit' },
     sources: [{ file: 'target.md', role: 'target' }],
     summary: {

@@ -182,7 +182,6 @@ export const scenarioSalience = defineAuditTask({
     ],
   },
   exampleAudit: {
-    version: 1,
     task: {
       id: 'scenario-salience',
       payload: {

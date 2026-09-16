@@ -339,7 +339,6 @@ export const banknoteProposalLint = defineAuditTask({
     ],
   },
   exampleAudit: {
-    version: 1,
     task: {
       id: 'banknote-proposal-lint',
       payload: { artifact: 'banknote_series_design_proposal', paired_faces: true },

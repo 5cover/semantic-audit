@@ -173,7 +173,6 @@ export const reportCompression = defineAuditTask({
     ],
   },
   exampleAudit: {
-    version: 1,
     task: {
       id: 'report-compression',
       payload: { source_format: 'typst', page_limit: 30, excluded_content: ['annexes'] },
