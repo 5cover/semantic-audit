@@ -25,9 +25,9 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "tsc -p tsconfig.test.json && node --test .test-build/test/*.test.js",
+    "test": "tsx --test",
     "check": "pnpm run typecheck && pnpm run test"
   },
   "keywords": [],
@@ -41,6 +41,7 @@
   "devDependencies": {
     "@types/node": "^24.10.0",
     "prettier": "^3.9.6",
+    "tsx": "^4.23.13",
     "typescript": "^5.9.3"
   },
   "prettier": {

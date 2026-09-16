@@ -35,11 +35,11 @@ export const scenarioSalience = defineAuditTask({
       diagnostic_terms: z.array(z.string().min(1)).optional(),
     }),
     summaryPayload: z.strictObject({
-      by_kind: z.record(z.string(), z.number().int().min(0)),
-      by_owner: z.record(z.enum(owners), z.number().int().min(0)),
+      by_kind: z.record(z.string(), z.int().min(0)),
+      by_owner: z.record(z.enum(owners), z.int().min(0)),
       estimated_effect: z.strictObject({
-        llm_facing_words_removed: z.number().int().min(0),
-        words_moved_to_annotations: z.number().int().min(0),
+        llm_facing_words_removed: z.int().min(0),
+        words_moved_to_annotations: z.int().min(0),
       }),
     }),
     findingPayload: z.strictObject({
@@ -55,8 +55,8 @@ export const scenarioSalience = defineAuditTask({
       annotation: z.string().optional(),
     }),
     diagnostics: z.strictObject({
-      before: z.record(z.string(), z.number().int().min(0)),
-      after: z.record(z.string(), z.number().int().min(0)).nullable(),
+      before: z.record(z.string(), z.int().min(0)),
+      after: z.record(z.string(), z.int().min(0)).nullable(),
       note: z.string().min(1),
     }),
   },

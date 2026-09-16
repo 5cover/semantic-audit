@@ -4,6 +4,7 @@ import { validateRegistry } from '@tempalace/core';
 import YAML from 'yaml';
 import { registry } from '../src/registry.js';
 import { banknoteProposalLint, reportCompression, scenarioSalience } from '../src/tasks/index.js';
+import { stringifyYaml } from '../src/util.js';
 
 const tasks = [reportCompression, banknoteProposalLint, scenarioSalience];
 
@@ -61,7 +62,7 @@ test('rejected findings cannot claim an execution result', () => {
 });
 
 test('YAML validation uses the same composed contract', () => {
-  const source = YAML.stringify(reportCompression.definition.exampleAudit);
+  const source = stringifyYaml(reportCompression.definition.exampleAudit);
   assert.equal(reportCompression.validateAuditYaml(source).success, true);
   assert.equal(reportCompression.validateAuditYaml('findings: [').success, false);
 });

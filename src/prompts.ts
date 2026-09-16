@@ -1,5 +1,5 @@
-import YAML from 'yaml';
 import type { AuditTaskDefinition, DecisionMode } from './types.js';
+import { stringifyYaml } from './util.js';
 
 function section(level: number, title: string, body: string) {
   return `${'#'.repeat(level)} ${title}\n\n${body.trim()}`;
@@ -93,7 +93,7 @@ ${section(2, `Task: ${definition.name}`, `${definition.analysis.objective.trim()
 
 ${section(2, 'Decision policy', decisionPolicy(definition, options.decisionMode))}
 
-${section(2, 'Output', `${options.output.trim()}\n\nThe audit must conform to the schema and use the example only as a shape reference.\n\n### Audit schema\n\n\`\`\`yaml\n${YAML.stringify(options.auditJsonSchema).trim()}\n\`\`\`\n\n### Example audit\n\n\`\`\`yaml\n${YAML.stringify(definition.exampleAudit).trim()}\n\`\`\``)}
+${section(2, 'Output', `${options.output.trim()}\n\nThe audit must conform to the schema and use the example only as a shape reference.\n\n### Audit schema\n\n\`\`\`yaml\n${stringifyYaml(options.auditJsonSchema).trim()}\n\`\`\`\n\n### Example audit\n\n\`\`\`yaml\n${stringifyYaml(definition.exampleAudit).trim()}\n\`\`\``)}
 `;
 }
 

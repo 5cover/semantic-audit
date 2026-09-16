@@ -9,6 +9,7 @@ import {
   renderApplicationPrompt,
 } from './prompts.js';
 import type { AuditTask, AuditTaskDefinition, AuditValidationResult, DecisionMode } from './types.js';
+import { stringifyYaml } from './util.js';
 
 function validateDefinition(definition: AuditTaskDefinition) {
   const stableId = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -80,7 +81,7 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
 ): AuditTask<SupportedDecisionMode<Definition>> {
   validateDefinition(definition);
   const { structuralSchema, auditSchema } = createAuditSchemas(definition);
-  const auditJsonSchema = z.toJSONSchema(structuralSchema, { target: 'draft-2020-12', reused: 'ref' }) as Record<
+  const auditJsonSchema = z.toJSONSchema(structuralSchema, { target: 'draft-2020-12', reused: 'inline' }) as Record<
     string,
     unknown
   >;
@@ -121,7 +122,7 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
     description: `Render the composed audit schema for ${definition.name}.`,
     input: z.object({}),
     output: z.string(),
-    run: () => YAML.stringify(auditJsonSchema),
+    run: () => stringifyYaml(auditJsonSchema),
   });
 
   function validateAudit(value: unknown): AuditValidationResult {

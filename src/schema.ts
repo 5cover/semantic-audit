@@ -5,8 +5,8 @@ const locationSchema = z.strictObject({
   file: z.string().min(1),
   section: z.string().min(1),
   anchor: z.string().min(1).optional(),
-  line_start: z.number().int().min(1).optional(),
-  line_end: z.number().int().min(1).optional(),
+  line_start: z.int().min(1).optional(),
+  line_end: z.int().min(1).optional(),
 });
 
 const executionSchema = z
@@ -70,12 +70,12 @@ export function createAuditSchemas(definition: AuditTaskDefinition) {
     withOptionalPayload(
       {
         findings: z.strictObject({
-          total: z.number().int().min(0),
-          decided: z.number().int().min(0),
-          open: z.number().int().min(0),
-          applied: z.number().int().min(0),
-          kept: z.number().int().min(0),
-          blocked: z.number().int().min(0),
+          total: z.int().min(0),
+          decided: z.int().min(0),
+          open: z.int().min(0),
+          applied: z.int().min(0),
+          kept: z.int().min(0),
+          blocked: z.int().min(0),
         }),
       },
       schemas.summaryPayload
@@ -91,8 +91,8 @@ export function createAuditSchemas(definition: AuditTaskDefinition) {
           file: z.string().min(1),
           role: z.enum(['target', 'reference']),
           description: z.string().min(1).optional(),
-          words: z.number().int().min(0).optional(),
-          pages: z.number().int().min(0).optional(),
+          words: z.int().min(0).optional(),
+          pages: z.int().min(0).optional(),
         })
       )
       .min(1)

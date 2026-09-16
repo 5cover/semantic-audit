@@ -2,8 +2,8 @@ import * as z from 'zod';
 import { defineAuditTask } from '../tasks.js';
 
 const estimatedGain = z.strictObject({
-  words: z.number().int().min(1).optional(),
-  pages: z.number().int().min(1).optional(),
+  words: z.int().min(1).optional(),
+  pages: z.int().min(1).optional(),
 });
 
 export const reportCompression = defineAuditTask({
@@ -29,16 +29,16 @@ export const reportCompression = defineAuditTask({
   schemas: {
     taskPayload: z.strictObject({
       source_format: z.literal('typst'),
-      page_limit: z.number().int().min(1),
+      page_limit: z.int().min(1),
       excluded_content: z.array(z.string()),
     }),
     summaryPayload: z.strictObject({
-      current_words: z.number().int().min(0),
-      current_pages: z.number().int().min(0).optional(),
+      current_words: z.int().min(0),
+      current_pages: z.int().min(0).optional(),
       by_scale: z.strictObject({
-        macro: z.number().int().min(0),
-        micro: z.number().int().min(0),
-        structural: z.number().int().min(0),
+        macro: z.int().min(0),
+        micro: z.int().min(0),
+        structural: z.int().min(0),
       }),
       estimated_gain: z.strictObject({
         conservative: estimatedGain,
