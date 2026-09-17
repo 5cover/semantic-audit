@@ -1,14 +1,16 @@
 {
   "name": "semantic-audit",
   "version": "1.0.0",
-  "description": "Composable semantic audit, decision, and application workflows for LLM-assisted review",
+  "description": "Composable audit-then-apply workflows for semantic LLM review",
   "type": "module",
   "packageManager": "pnpm@11.20.0",
   "engines": {
     "node": ">=22.0.0"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "exports": {
     ".": {
@@ -28,11 +30,32 @@
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "tsx --test",
-    "check": "pnpm run typecheck && pnpm run test"
+    "check": "pnpm run typecheck && pnpm run test",
+    "prepack": "pnpm run build",
+    "prepublishOnly": "pnpm run check && pnpm run build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "llm",
+    "ai",
+    "semantic-audit",
+    "lint",
+    "prompt-engineering",
+    "workflow",
+    "tempalace"
+  ],
+  "author": "Scover",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/5cover/semantic-audit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/5cover/semantic-audit/issues"
+  },
+  "homepage": "https://github.com/5cover/semantic-audit#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@tempalace/core": "^0.1.0",
     "yaml": "^2.9.1"
