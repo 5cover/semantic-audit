@@ -365,6 +365,7 @@ export const banknoteProposalLint = defineAuditTask({
         location: { file: 'proposal.md', section: '10 euro verso prompt', anchor: 'secondary dishes' },
         related_locations: [],
         scope: 'local',
+        excerpt: 'Secondary dishes surround the primary observatory dish.',
         issue: 'The number of large secondary dishes is unspecified, allowing materially different site density.',
         rationale: 'Large dishes strongly affect silhouette and balance.',
         priority: 'high',

@@ -129,7 +129,6 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
   const schema = template({
     name: `${definition.name}: schema`,
     description: `Render the composed audit schema for ${definition.name}.`,
-    input: z.object({}),
     output: z.string(),
     run: () => stringifyYaml(auditJsonSchema),
   })

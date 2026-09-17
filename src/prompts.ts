@@ -78,7 +78,7 @@ Search broadly using lexical, structural, comparative, and semantic signals. A s
 
 ### Adjudicate with evidence
 
-Report only concrete mismatches supported by the target or its references. Do not report generic best practices without project-specific evidence. Consider relationships between distant producers, consumers, sections, and representations.
+Report only concrete mismatches supported by the target or its references. Do not report generic best practices without project-specific evidence. Every finding must include a short, verbatim \`excerpt\` from the target that makes it immediately recognizable. For cluster, cross-section, or global findings, use one representative instance. Consider relationships between distant producers, consumers, sections, and representations.
 
 ### Consolidate findings
 
@@ -115,7 +115,7 @@ ${section(2, 'Inputs', `${options.inputs.trim()}\n\n### Audit\n\n${options.audit
 
 ${section(2, 'Authority', `For each finding, use \`decision\` first and \`note\` second. The recommendation is advisory only.\n\n- An option key selects that option.\n- \`custom\` applies only the instruction in \`note\`.\n- \`reject\`, \`defer\`, and \`null\` make no target change.\n- A selected \`keep\` option records a kept outcome without changing the target.`)}
 
-${section(2, 'Application method', `Locate the exact material using the stable location and current context. Apply the smallest change that fulfills the selected option or custom note. Preserve surrounding semantics and structure.\n\nAfter a successful content change, record an \`applied\` execution result and describe the actual operation. Record \`kept\` for a selected keep option. If the source no longer matches safely or validation fails, leave that location unchanged and record \`blocked\`. Leave execution null for rejected, deferred, and open findings.\n\nPreserve every analysis field. Update only execution data, derived summary values, and task-defined after-application diagnostics.`)}
+${section(2, 'Application method', `Locate the exact material using the stable location and verbatim excerpt. Apply the smallest change that fulfills the selected option or custom note. Preserve surrounding semantics and structure.\n\nAfter a successful content change, record an \`applied\` execution result and describe the actual operation. Record \`kept\` for a selected keep option. If the source no longer matches safely or validation fails, leave that location unchanged and record \`blocked\`. Leave execution null for rejected, deferred, and open findings.\n\nPreserve every analysis field. Update only execution data, derived summary values, and task-defined after-application diagnostics.`)}
 
 ${section(2, `Task: ${options.definition.name}`, taskSections)}
 

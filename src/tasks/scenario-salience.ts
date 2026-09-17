@@ -214,7 +214,7 @@ export const scenarioSalience = defineAuditTask({
         },
         related_locations: [],
         scope: 'local',
-        current: 'His final contribution should remain mundane enough that the accumulated year gives it weight.',
+        excerpt: 'His final contribution should remain mundane enough that the accumulated year gives it weight.',
         issue: 'A settled narrative property is modalized as an authorial preference.',
         priority: 'medium',
         confidence: 'high',

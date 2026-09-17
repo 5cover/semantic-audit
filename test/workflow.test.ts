@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { validateRegistry } from '@tempalace/core'
+import { template, validateRegistry } from '@tempalace/core'
 import YAML from 'yaml'
 import { registry } from '../src/registry.js'
 import { banknoteProposalLint, reportCompression, scenarioSalience } from '../src/tasks/index.js'
@@ -17,7 +17,7 @@ test('all built-in examples satisfy their composed contracts', () => {
 
 test('schema templates emit parseable draft 2020-12 schemas', async () => {
   for (const task of tasks) {
-    const source = await task.templates.schema.run({})
+    const source = await task.templates.schema.run()
     const parsed = YAML.parse(source)
     assert.equal(parsed.$schema, 'https://json-schema.org/draft/2020-12/schema')
     assert.equal(parsed.type, 'object')
@@ -35,6 +35,24 @@ test('relational validation rejects unknown recommendations and incorrect summar
     assert(result.issues.some(issue => issue.includes('recommendation')))
     assert(result.issues.some(issue => issue.includes('summary.findings.total')))
   }
+})
+
+test('every finding requires a non-empty verbatim excerpt', () => {
+  const audit = structuredClone(scenarioSalience.definition.exampleAudit) as any
+  delete audit.findings.SS001.excerpt
+
+  const result = scenarioSalience.validateAudit(audit)
+  assert.equal(result.success, false)
+  if (!result.success) assert(result.issues.some(issue => issue.includes('findings.SS001.excerpt')))
+})
+
+test('findings reject the replaced current field', () => {
+  const audit = structuredClone(scenarioSalience.definition.exampleAudit) as any
+  audit.findings.SS001.current = audit.findings.SS001.excerpt
+
+  const result = scenarioSalience.validateAudit(audit)
+  assert.equal(result.success, false)
+  if (!result.success) assert(result.issues.some(issue => issue.includes('Unrecognized key')))
 })
 
 test('custom decisions require a note', () => {
@@ -79,6 +97,7 @@ test('manual analysis prompt is neutral, nested, and non-authorizing', async () 
   assert.match(prompt, /^### Finding families/m)
   assert.match(prompt, /^#### Counterfactual salience/m)
   assert.match(prompt, /Leave every `decision` as `null`/)
+  assert.match(prompt, /short, verbatim `excerpt`/)
   assert.doesNotMatch(prompt, /\[object Object\]/)
 })
 
@@ -112,6 +131,34 @@ test('application prompt applies decisions without discovering findings', async 
   assert.match(prompt, /Do not search for new findings/)
   assert.match(prompt, /`reject`, `defer`, and `null` make no target change/)
   assert.match(prompt, /Preserve every analysis field/)
+})
+
+test('task application templates retain their parameterized interfaces', async () => {
+  const scenarioFix = template({
+    name: 'scenario fix',
+    output: scenarioSalience.templates.apply.output,
+    input: scenarioSalience.templates.apply.input,
+    run: input => scenarioSalience.templates.apply.run(input),
+  })
+
+  const prompt = await scenarioFix.run({
+    inputs: 'scenario.md is the target.',
+    audit: 'review.yaml contains the audit.',
+    output: 'Emit the updated files.',
+  })
+
+  assert.match(prompt, /Semantic audit application/)
+})
+
+test('task schema templates retain their inputless interfaces', async () => {
+  const renderedSchema = template({
+    name: 'scenario schema',
+    output: scenarioSalience.templates.schema.output,
+    run: () => scenarioSalience.templates.schema.run(),
+  })
+
+  const source = await renderedSchema.run()
+  assert.equal(YAML.parse(source).$schema, 'https://json-schema.org/draft/2020-12/schema')
 })
 
 test('the root Tempalace registry exposes all built-in phases', () => {

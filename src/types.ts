@@ -1,4 +1,4 @@
-import type { Template, zod as z } from '@tempalace/core'
+import type { InputlessTemplate, ParameterizedTemplate, zod as z } from '@tempalace/core'
 
 export type DecisionMode = 'manual' | 'safe'
 
@@ -79,9 +79,9 @@ export interface AuditTask<Mode extends DecisionMode = DecisionMode> {
   readonly auditSchema: z.ZodType
   readonly auditJsonSchema: Record<string, unknown>
   readonly templates: {
-    readonly analyze: Template<AnalysisTemplateInput<Mode>, string>
-    readonly apply: Template<ApplicationTemplateInput, string>
-    readonly schema: Template<Record<string, never>, string>
+    readonly analyze: ParameterizedTemplate<AnalysisTemplateInput<Mode>, string>
+    readonly apply: ParameterizedTemplate<ApplicationTemplateInput, string>
+    readonly schema: InputlessTemplate<string>
   }
   validateAudit(value: unknown): AuditValidationResult
   validateAuditYaml(source: string): AuditValidationResult

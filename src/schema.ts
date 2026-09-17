@@ -46,31 +46,35 @@ export function createAuditSchemas(definition: AuditTaskDefinition) {
     )
   )
 
-  const findingSchema = z.object(
-    withOptionalPayload(
-      {
-        title: zStringMin1.optional(),
-        location: locationSchema,
-        related_locations: z.array(locationSchema).default([]),
-        scope: z.enum(['local', 'cluster', 'cross_section', 'global']),
-        current: z.string().optional(),
-        issue: zStringMin1,
-        rationale: zStringMin1.optional(),
-        priority: z.enum(['high', 'medium', 'low']),
-        confidence: z.enum(['high', 'medium', 'low']),
-        options: z
-          .record(optionId, optionSchema)
-          .describe('Concrete resolution options keyed by one uppercase letter.'),
-        recommendation: optionId.describe('Advisory option key. It is not authorization by itself.'),
-        decision: z
-          .union([optionId, z.enum(['reject', 'defer', 'custom']), z.null()])
-          .describe('Authorized option key or review state. Null means no decision.'),
-        note: zStringMin1.nullable().describe('Human refinement or instruction. Required for a custom decision.'),
-        execution: executionSchema,
-      },
-      schemas.findingPayload
+  const findingSchema = z
+    .object(
+      withOptionalPayload(
+        {
+          title: zStringMin1.optional(),
+          location: locationSchema,
+          related_locations: z.array(locationSchema).default([]),
+          scope: z.enum(['local', 'cluster', 'cross_section', 'global']),
+          excerpt: zStringMin1.describe(
+            'Short verbatim excerpt from the target that makes the finding immediately recognizable. It need not contain the complete affected span. For cluster, cross-section, or global findings, choose a representative instance.'
+          ),
+          issue: zStringMin1,
+          rationale: zStringMin1.optional(),
+          priority: z.enum(['high', 'medium', 'low']),
+          confidence: z.enum(['high', 'medium', 'low']),
+          options: z
+            .record(optionId, optionSchema)
+            .describe('Concrete resolution options keyed by one uppercase letter.'),
+          recommendation: optionId.describe('Advisory option key. It is not authorization by itself.'),
+          decision: z
+            .union([optionId, z.enum(['reject', 'defer', 'custom']), z.null()])
+            .describe('Authorized option key or review state. Null means no decision.'),
+          note: zStringMin1.nullable().describe('Human refinement or instruction. Required for a custom decision.'),
+          execution: executionSchema,
+        },
+        schemas.findingPayload
+      )
     )
-  )
+    .strict()
 
   const summarySchema = z.object(
     withOptionalPayload(

@@ -199,7 +199,7 @@ export const reportCompression = defineAuditTask({
         location: { file: 'src/project.typ', section: 'Réalisation technique', anchor: 'Cette architecture permet' },
         related_locations: [],
         scope: 'local',
-        current: 'Cette architecture permet ainsi de garantir une séparation claire et explicite des responsabilités.',
+        excerpt: 'Cette architecture permet ainsi de garantir une séparation claire et explicite des responsabilités.',
         issue: 'La phrase reformule une séparation déjà démontrée par le paragraphe.',
         priority: 'high',
         confidence: 'high',
