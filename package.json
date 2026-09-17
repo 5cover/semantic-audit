@@ -35,12 +35,11 @@
   "license": "ISC",
   "dependencies": {
     "@tempalace/core": "link:../tempalace/packages/core",
-    "yaml": "^2.9.1",
-    "zod": "^4.6.4"
+    "yaml": "^2.9.1"
   },
   "devDependencies": {
-    "@types/node": "^24.10.0",
-    "prettier": "^3.9.6",
+    "@types/node": "^24.13.5",
+    "prettier": "^3.9.7",
     "tsx": "^4.23.13",
     "typescript": "^5.9.3"
   },
@@ -50,6 +49,7 @@
     "singleQuote": true,
     "arrowParens": "avoid",
     "bracketSameLine": true,
-    "trailingComma": "es5"
+    "trailingComma": "es5",
+    "semi": false
   }
 }

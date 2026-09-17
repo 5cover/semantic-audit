@@ -1,6 +1,6 @@
-import * as z from 'zod';
-import { defineAuditTask } from '../tasks.js';
-import type { AuditRule } from '../types.js';
+import { zod as z } from '@tempalace/core'
+import { defineAuditTask } from '../tasks.js'
+import type { AuditRule } from '../types.js'
 
 const categories = [
   'unresolved_alternative',
@@ -39,10 +39,10 @@ const categories = [
   'normative_polarity',
   'resolution_asymmetry',
   'other',
-] as const;
+] as const
 
 function rule(id: string, title: string, description: string, signals: readonly string[] = []): AuditRule {
-  return { id, title, description, ...(signals.length === 0 ? {} : { signals }) };
+  return { id, title, description, ...(signals.length === 0 ? {} : { signals }) }
 }
 
 const promptRules: readonly AuditRule[] = [
@@ -222,7 +222,7 @@ const promptRules: readonly AuditRule[] = [
     'Resolution symmetry',
     'Check whether parallel denominations and paired faces are specified at comparable levels of visual resolution.'
   ),
-];
+]
 
 export const banknoteProposalLint = defineAuditTask({
   id: 'banknote-proposal-lint',
@@ -400,4 +400,4 @@ export const banknoteProposalLint = defineAuditTask({
       },
     },
   },
-});
+})

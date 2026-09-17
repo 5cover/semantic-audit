@@ -1,5 +1,5 @@
-import * as z from 'zod';
-import { defineAuditTask } from '../tasks.js';
+import { zod as z } from '@tempalace/core'
+import { defineAuditTask } from '../tasks.js'
 
 const kinds = [
   'counterfactual_salience',
@@ -18,9 +18,9 @@ const kinds = [
   'legal_boundary',
   'technical_boundary',
   'other',
-] as const;
+] as const
 
-const owners = ['story', 'author', 'none', 'mixed', 'unclear'] as const;
+const owners = ['story', 'author', 'none', 'mixed', 'unclear'] as const
 
 export const scenarioSalience = defineAuditTask({
   id: 'scenario-salience',
@@ -234,4 +234,4 @@ export const scenarioSalience = defineAuditTask({
       },
     },
   },
-});
+})

@@ -21,13 +21,13 @@ The package includes three faithful tasks derived from real workflows:
 The Power Apps and general static-analysis prompts that informed the evidence model are not built-in tasks because they do not yet use the decision artifact and application phase.
 
 ```ts
-import { scenarioSalience } from 'semantic-audit/tasks';
+import { scenarioSalience } from 'semantic-audit/tasks'
 
 const prompt = await scenarioSalience.templates.analyze.run({
   inputs: 'Audit scenario.md. Use style.md as a reference.',
   decisionMode: 'manual',
   output: 'Emit the audit YAML only.',
-});
+})
 ```
 
 Only `scenarioSalience` supports `decisionMode: "safe"`. In that opt-in mode, the analysis may copy a safe recommendation option key into `decision`. There is no separate `auto_apply` field.
@@ -37,14 +37,14 @@ Only `scenarioSalience` supports `decisionMode: "safe"`. In that opt-in mode, th
 Every task owns the complete audit contract composed from generic and task-specific Zod schemas.
 
 ```ts
-import { readFile } from 'node:fs/promises';
-import { reportCompression } from 'semantic-audit/tasks';
+import { readFile } from 'node:fs/promises'
+import { reportCompression } from 'semantic-audit/tasks'
 
-const yaml = await readFile('compression-review.yaml', 'utf8');
-const result = reportCompression.validateAuditYaml(yaml);
+const yaml = await readFile('compression-review.yaml', 'utf8')
+const result = reportCompression.validateAuditYaml(yaml)
 
 if (!result.success) {
-  throw new Error(result.issues.join('\n'));
+  throw new Error(result.issues.join('\n'))
 }
 ```
 
@@ -88,8 +88,8 @@ tp scenario-salience.schema
 - optional safe-decision criteria.
 
 ```ts
-import { z } from 'zod';
-import { defineAuditTask } from 'semantic-audit';
+import { defineAuditTask } from 'semantic-audit'
+import * as z from 'zod'
 
 export const terminologyAudit = defineAuditTask({
   id: 'terminology-audit',
@@ -139,7 +139,7 @@ export const terminologyAudit = defineAuditTask({
     },
     findings: {},
   },
-});
+})
 ```
 
 `defineAuditTask` validates `exampleAudit` immediately and rejects an incomplete definition.

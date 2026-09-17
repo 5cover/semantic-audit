@@ -1,12 +1,12 @@
-import type { AuditTaskDefinition, DecisionMode } from './types.js';
-import { stringifyYaml } from './util.js';
+import type { AuditTaskDefinition, DecisionMode } from './types.js'
+import { stringifyYaml } from './util.js'
 
 function section(level: number, title: string, body: string) {
-  return `${'#'.repeat(level)} ${title}\n\n${body.trim()}`;
+  return `${'#'.repeat(level)} ${title}\n\n${body.trim()}`
 }
 
 function list(values: readonly string[]) {
-  return values.map(value => `- ${value}`).join('\n');
+  return values.map(value => `- ${value}`).join('\n')
 }
 
 function renderRules(definition: AuditTaskDefinition) {
@@ -14,50 +14,50 @@ function renderRules(definition: AuditTaskDefinition) {
     .map(group => {
       const rules = group.rules
         .map(rule => {
-          const parts = [section(4, rule.title, rule.description)];
-          if (rule.signals?.length) parts.push(section(5, 'Discovery signals', list(rule.signals)));
-          if (rule.questions?.length) parts.push(section(5, 'Review questions', list(rule.questions)));
-          if (rule.nonFindings?.length) parts.push(section(5, 'Do not report', list(rule.nonFindings)));
-          if (rule.resolutions?.length) parts.push(section(5, 'Typical resolutions', list(rule.resolutions)));
-          return parts.join('\n\n');
+          const parts = [section(4, rule.title, rule.description)]
+          if (rule.signals?.length) parts.push(section(5, 'Discovery signals', list(rule.signals)))
+          if (rule.questions?.length) parts.push(section(5, 'Review questions', list(rule.questions)))
+          if (rule.nonFindings?.length) parts.push(section(5, 'Do not report', list(rule.nonFindings)))
+          if (rule.resolutions?.length) parts.push(section(5, 'Typical resolutions', list(rule.resolutions)))
+          return parts.join('\n\n')
         })
-        .join('\n\n');
-      const introduction = group.introduction === undefined ? '' : `${group.introduction.trim()}\n\n`;
-      return `${section(3, group.title, introduction + rules)}`;
+        .join('\n\n')
+      const introduction = group.introduction === undefined ? '' : `${group.introduction.trim()}\n\n`
+      return `${section(3, group.title, introduction + rules)}`
     })
-    .join('\n\n');
+    .join('\n\n')
 }
 
 function decisionPolicy(definition: AuditTaskDefinition, mode: DecisionMode) {
   if (mode === 'manual') {
-    return 'Leave every `decision` as `null`. A recommendation is advisory and is not authorization.';
+    return 'Leave every `decision` as `null`. A recommendation is advisory and is not authorization.'
   }
 
-  const criteria = definition.automaticDecisions?.criteria;
+  const criteria = definition.automaticDecisions?.criteria
   if (criteria === undefined) {
-    throw new Error(`Task '${definition.id}' does not support safe automatic decisions.`);
+    throw new Error(`Task '${definition.id}' does not support safe automatic decisions.`)
   }
 
-  return `For a recommendation that satisfies every criterion below, set \`decision\` to the recommendation option key. Otherwise leave \`decision\` as \`null\`.\n\n${list(criteria)}`;
+  return `For a recommendation that satisfies every criterion below, set \`decision\` to the recommendation option key. Otherwise leave \`decision\` as \`null\`.\n\n${list(criteria)}`
 }
 
 export function renderAnalysisPrompt(options: {
-  definition: AuditTaskDefinition;
-  inputs: string;
-  output: string;
-  decisionMode: DecisionMode;
-  auditJsonSchema: Record<string, unknown>;
+  definition: AuditTaskDefinition
+  inputs: string
+  output: string
+  decisionMode: DecisionMode
+  auditJsonSchema: Record<string, unknown>
 }) {
-  const { definition } = options;
-  const taskSections = definition.analysis.sections?.map(item => section(3, item.title, item.body)).join('\n\n') ?? '';
+  const { definition } = options
+  const taskSections = definition.analysis.sections?.map(item => section(3, item.title, item.body)).join('\n\n') ?? ''
   const protectedModel =
     definition.analysis.protectedModel === undefined
       ? ''
-      : `\n\n${section(3, 'Protected model', definition.analysis.protectedModel)}`;
+      : `\n\n${section(3, 'Protected model', definition.analysis.protectedModel)}`
   const taskInputs =
     definition.analysis.inputs === undefined
       ? ''
-      : `\n\n${section(3, 'Task-specific inputs', definition.analysis.inputs)}`;
+      : `\n\n${section(3, 'Task-specific inputs', definition.analysis.inputs)}`
 
   return `# Semantic audit
 
@@ -94,18 +94,18 @@ ${section(2, `Task: ${definition.name}`, `${definition.analysis.objective.trim()
 ${section(2, 'Decision policy', decisionPolicy(definition, options.decisionMode))}
 
 ${section(2, 'Output', `${options.output.trim()}\n\nThe audit must conform to the schema and use the example only as a shape reference.\n\n### Audit schema\n\n\`\`\`yaml\n${stringifyYaml(options.auditJsonSchema).trim()}\n\`\`\`\n\n### Example audit\n\n\`\`\`yaml\n${stringifyYaml(definition.exampleAudit).trim()}\n\`\`\``)}
-`;
+`
 }
 
 export function renderApplicationPrompt(options: {
-  definition: AuditTaskDefinition;
-  inputs: string;
-  audit: string;
-  output: string;
+  definition: AuditTaskDefinition
+  inputs: string
+  audit: string
+  output: string
 }) {
   const taskSections = options.definition.application.sections
     .map(item => section(3, item.title, item.body))
-    .join('\n\n');
+    .join('\n\n')
 
   return `# Semantic audit application
 
@@ -122,11 +122,11 @@ ${section(2, `Task: ${options.definition.name}`, taskSections)}
 ${section(2, 'Validation', `Confirm that every target change corresponds to an actionable decision, unresolved findings remain unchanged, protected semantics remain intact, and the resulting artifact remains structurally valid.`)}
 
 ${section(2, 'Output', options.output)}
-`;
+`
 }
 
 export const defaultAnalysisOutput =
-  'Emit only the audit YAML, wrapped in a Markdown code block. Do not append prose commentary.';
+  'Emit only the audit YAML, wrapped in a Markdown code block. Do not append prose commentary.'
 
 export const defaultApplicationOutput =
-  'Emit the updated target artifact and the updated audit YAML. Do not add a new review or new recommendations.';
+  'Emit the updated target artifact and the updated audit YAML. Do not add a new review or new recommendations.'

@@ -1,10 +1,10 @@
-import * as z from 'zod';
-import { defineAuditTask } from '../tasks.js';
+import { zod as z } from '@tempalace/core'
+import { defineAuditTask } from '../tasks.js'
 
 const estimatedGain = z.strictObject({
   words: z.int().min(1).optional(),
   pages: z.int().min(1).optional(),
-});
+})
 
 export const reportCompression = defineAuditTask({
   id: 'report-compression',
@@ -227,4 +227,4 @@ export const reportCompression = defineAuditTask({
       },
     },
   },
-});
+})

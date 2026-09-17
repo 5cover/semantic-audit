@@ -1,4 +1,4 @@
-import { banknoteProposalLint, reportCompression, scenarioSalience } from './tasks/index.js';
+import { banknoteProposalLint, reportCompression, scenarioSalience } from './tasks/index.js'
 
 export const registry = {
   'report-compression.analyze': reportCompression.templates.analyze,
@@ -10,6 +10,6 @@ export const registry = {
   'scenario-salience.analyze': scenarioSalience.templates.analyze,
   'scenario-salience.apply': scenarioSalience.templates.apply,
   'scenario-salience.schema': scenarioSalience.templates.schema,
-} as const;
+} as const
 
-export default registry;
+export default registry

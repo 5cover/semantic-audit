@@ -1,1 +1,1 @@
-export { default } from './src/registry.js';
+export { default } from './src/registry.js'
