@@ -1,10 +1,5 @@
 export { defineAuditTask } from './tasks.js'
-export {
-  defaultAnalysisOutput,
-  defaultApplicationOutput,
-  renderAnalysisPrompt,
-  renderApplicationPrompt,
-} from './prompts.js'
+export { analysisOutputEmit, applicationOutputEmit, renderAnalysisPrompt, renderApplicationPrompt } from './prompts.js'
 export type {
   AuditPromptSection,
   AnalysisTemplateInput,

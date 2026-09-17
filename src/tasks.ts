@@ -2,12 +2,7 @@ import { template, zod as z } from '@tempalace/core'
 
 import YAML from 'yaml'
 import { createAuditSchemas } from './schema.js'
-import {
-  defaultAnalysisOutput,
-  defaultApplicationOutput,
-  renderAnalysisPrompt,
-  renderApplicationPrompt,
-} from './prompts.js'
+import { renderAnalysisPrompt, renderApplicationPrompt } from './prompts.js'
 import type { AuditTask, AuditTaskDefinition, AuditValidationResult, DecisionMode } from './types.js'
 import { stringifyYaml } from './util.js'
 
@@ -98,16 +93,14 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
   auditJsonSchema.description = `Structured audit for the ${definition.name} task.`
 
   const decisionModeSchema =
-    definition.automaticDecisions === undefined
-      ? z.literal('manual').default('manual')
-      : z.enum(['manual', 'safe']).default('manual')
+    definition.automaticDecisions === undefined ? z.literal('manual') : z.enum(['manual', 'safe'])
 
   const analyze = template({
     name: `${definition.name}: analyze`,
     description: definition.description,
     input: z.object({
       inputs: z.string().min(1),
-      output: z.string().min(1).default(defaultAnalysisOutput),
+      output: z.string().min(1),
       decisionMode: decisionModeSchema,
     }),
     output: z.string(),
@@ -120,14 +113,14 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
     input: z.object({
       inputs: z.string().min(1),
       audit: z.string().min(1),
-      output: z.string().min(1).default(defaultApplicationOutput),
+      output: z.string().min(1),
     }),
     output: z.string(),
     run: input => renderApplicationPrompt({ definition, ...input }),
   })
 
   const schema = template({
-    name: `${definition.name}: schema`,
+    name: `$ {definition.name}: schema`,
     description: `Render the composed audit schema for ${definition.name}.`,
     output: z.string(),
     run: () => stringifyYaml(auditJsonSchema),

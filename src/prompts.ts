@@ -111,7 +111,7 @@ export function renderApplicationPrompt(options: {
 
 ${section(2, 'Stage', `Apply only the decisions authorized in the supplied audit. The analysis is complete. Do not search for new findings, broaden existing findings, or perform opportunistic cleanup.`)}
 
-${section(2, 'Inputs', `${options.inputs.trim()}\n\n### Audit\n\n${options.audit.trim()}`)}
+${section(2, 'Inputs', `${options.inputs.trim()}\n\n### Audit\n\n\`\`\`yaml\n${options.audit.trim()}\n\`\`\``)}
 
 ${section(2, 'Authority', `For each finding, use \`decision\` first and \`note\` second. The recommendation is advisory only.\n\n- An option key selects that option.\n- \`custom\` applies only the instruction in \`note\`.\n- \`reject\`, \`defer\`, and \`null\` make no target change.\n- A selected \`keep\` option records a kept outcome without changing the target.`)}
 
@@ -125,8 +125,8 @@ ${section(2, 'Output', options.output)}
 `
 }
 
-export const defaultAnalysisOutput =
+export const analysisOutputEmit =
   'Emit only the audit YAML, wrapped in a Markdown code block. Do not append prose commentary.'
 
-export const defaultApplicationOutput =
+export const applicationOutputEmit =
   'Emit the updated target artifact and the updated audit YAML. Do not add a new review or new recommendations.'

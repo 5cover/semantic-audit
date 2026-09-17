@@ -1,4 +1,4 @@
-import { stringify } from 'yaml'
+import YAML from 'yaml'
 export const stringifyYaml = (x: unknown) => {
-  return stringify(x, { aliasDuplicateObjects: true, lineWidth: 0, nullStr: '' })
+  return YAML.stringify(x, { lineWidth: 0, singleQuote: true, nullStr: '' })
 }
