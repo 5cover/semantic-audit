@@ -148,6 +148,10 @@ test('application prompt applies decisions without discovering findings', async 
   assert.match(prompt, /Do not search for new findings/);
   assert.match(prompt, /`reject`, `defer`, and `null` make no target change/);
   assert.match(prompt, /Preserve every analysis field/);
+  assert.match(prompt, /^## Task specification: Banknote proposal lint/m);
+  assert.match(prompt, /^### Detector families/m);
+  assert.match(prompt, /^## Audit contract/m);
+  assert.match(prompt, /banknote_series_design_proposal/);
 });
 test('task application templates retain their parameterized interfaces', async () => {
   const scenarioFix = template({

@@ -116,7 +116,7 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
       output: z.string().min(1),
     }),
     output: z.string(),
-    run: input => renderApplicationPrompt({ definition, ...input }),
+    run: input => renderApplicationPrompt({ definition, auditJsonSchema, ...input }),
   })
 
   const schema = template({

@@ -41,6 +41,26 @@ function decisionPolicy(definition: AuditTaskDefinition, mode: DecisionMode) {
   return `For a recommendation that satisfies every criterion below, set \`decision\` to the recommendation option key. Otherwise leave \`decision\` as \`null\`.\n\n${list(criteria)}`
 }
 
+function renderTaskSpecification(definition: AuditTaskDefinition) {
+  const parts = [definition.description.trim(), section(3, 'Objective', definition.analysis.objective)]
+
+  if (definition.analysis.inputs !== undefined) {
+    parts.push(section(3, 'Task-specific inputs', definition.analysis.inputs))
+  }
+  if (definition.analysis.protectedModel !== undefined) {
+    parts.push(section(3, 'Protected model', definition.analysis.protectedModel))
+  }
+  for (const item of definition.analysis.sections ?? []) {
+    parts.push(section(3, item.title, item.body))
+  }
+  parts.push(renderRules(definition))
+  if (definition.analysis.finalTest !== undefined) {
+    parts.push(section(3, 'Final test', definition.analysis.finalTest))
+  }
+
+  return parts.join('\n\n')
+}
+
 export function renderAnalysisPrompt(options: {
   definition: AuditTaskDefinition
   inputs: string
@@ -102,6 +122,7 @@ export function renderApplicationPrompt(options: {
   inputs: string
   audit: string
   output: string
+  auditJsonSchema: Record<string, unknown>
 }) {
   const taskSections = options.definition.application.sections
     .map(item => section(3, item.title, item.body))
@@ -117,7 +138,9 @@ ${section(2, 'Authority', `For each finding, use \`decision\` first and \`note\`
 
 ${section(2, 'Application method', `Locate the exact material using the stable location and verbatim excerpt. Apply the smallest change that fulfills the selected option or custom note. Preserve surrounding semantics and structure.\n\nAfter a successful content change, record an \`applied\` execution result and describe the actual operation. Record \`kept\` for a selected keep option. If the source no longer matches safely or validation fails, leave that location unchanged and record \`blocked\`. Leave execution null for rejected, deferred, and open findings.\n\nPreserve every analysis field. Update only execution data, derived summary values, and task-defined after-application diagnostics.`)}
 
-${section(2, `Task: ${options.definition.name}`, taskSections)}
+${section(2, `Task specification: ${options.definition.name}`, `${renderTaskSpecification(options.definition)}\n\n${taskSections}`)}
+
+${section(2, 'Audit contract', `The updated audit must preserve the supplied findings and conform to this composed contract. Task-specific payload schemas are included here.\n\n### Audit schema\n\n\`\`\`yaml\n${stringifyYaml(options.auditJsonSchema).trim()}\n\`\`\``)}
 
 ${section(2, 'Validation', `Confirm that every target change corresponds to an actionable decision, unresolved findings remain unchanged, protected semantics remain intact, and the resulting artifact remains structurally valid.`)}
 
