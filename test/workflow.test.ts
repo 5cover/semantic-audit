@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { template, validateRegistry } from '@tempalace/core'
-import YAML from 'yaml'
+import { parse } from 'yaml'
 import { registry } from '../src/registry.js'
 import { banknoteProposalLint, reportCompression, scenarioSalience } from '../src/tasks/index.js'
 import { stringifyYaml } from '../src/util.js'
@@ -19,7 +19,7 @@ test('all built-in examples satisfy their composed contracts', () => {
 test('schema templates emit parseable draft 2020-12 schemas', async () => {
   for (const task of tasks) {
     const source = await task.templates.schema.run()
-    const parsed = YAML.parse(source) as unknown
+    const parsed = parse(source) as unknown
     assert(typeof parsed === 'object' && parsed !== null && '$schema' in parsed && 'type' in parsed)
     assert.equal(parsed.$schema, 'https://json-schema.org/draft/2020-12/schema')
     assert.equal(parsed.type, 'object')
@@ -178,7 +178,7 @@ test('task schema templates retain their inputless interfaces', async () => {
   })
 
   const source = await renderedSchema.run()
-  assert.equal((YAML.parse(source) as { $schema: unknown }).$schema, 'https://json-schema.org/draft/2020-12/schema')
+  assert.equal((parse(source) as { $schema: unknown }).$schema, 'https://json-schema.org/draft/2020-12/schema')
 })
 
 test('the root Tempalace registry exposes all built-in phases', () => {

@@ -144,6 +144,242 @@ export const terminologyAudit = defineAuditTask({
 
 `defineAuditTask` validates `exampleAudit` immediately and rejects an incomplete definition.
 
+The task produces two independent prompts. The analysis prompt receives the target and creates an audit. The
+application prompt receives the target and a reviewed audit, then applies only its authorized decisions. Both prompts
+repeat the task specification and audit contract. The `Audit schema` and `Example audit` blocks below are elided only
+because they are generated directly from the composed schemas and example above.
+
+With these inputs:
+
+```ts
+const analysisPrompt = await terminologyAudit.templates.analyze.run({
+  inputs: 'target.md is the terminology document to review.',
+  decisionMode: 'manual',
+  output: 'Emit only the audit YAML.',
+})
+
+const applicationPrompt = await terminologyAudit.templates.apply.run({
+  inputs: 'target.md is the terminology document to update.',
+  audit: `
+task:
+  id: terminology-audit
+sources:
+  - file: target.md
+    role: target
+summary:
+  findings:
+    total: 1
+    decided: 1
+    open: 0
+    applied: 0
+    kept: 0
+    blocked: 0
+findings:
+  T1:
+    location:
+      file: target.md
+      section: API reference
+      anchor: client token
+    related_locations: []
+    scope: local
+    excerpt: "The client token authenticates each request."
+    issue: The target uses client token for the canonical access token.
+    priority: medium
+    confidence: high
+    options:
+      A:
+        action: replace
+        description: Use the canonical term access token.
+        replacement: "The access token authenticates each request."
+        risk: low
+    recommendation: A
+    decision: A
+    note: null
+    execution: null
+    payload:
+      canonicalTerm: access token
+`,
+  output: 'Emit the updated target and audit YAML.',
+})
+```
+
+The analysis template renders:
+
+````md
+# Semantic audit
+
+## Stage
+
+Perform the analysis stage for the configured task. Examine the complete target and produce the structured audit. Do not modify target artifacts.
+
+## Inputs
+
+target.md is the terminology document to review.
+
+## Generic method
+
+### Establish the model
+
+Infer the target's actual semantics, functions, contracts, and protected properties from the supplied evidence.
+
+### Discover candidates
+
+Search broadly using lexical, structural, comparative, and semantic signals. A surface match is evidence for inspection, not a finding by itself.
+
+### Adjudicate with evidence
+
+Report only concrete mismatches supported by the target or its references. Do not report generic best practices without project-specific evidence. Every finding must include a short, verbatim `excerpt` from the target that makes it immediately recognizable. For cluster, cross-section, or global findings, use one representative instance. Consider relationships between distant producers, consumers, sections, and representations.
+
+### Consolidate findings
+
+Create one finding per independently reviewable root decision. Combine repeated symptoms of the same underlying issue and keep distinct decisions separate.
+
+### Recommend options
+
+Provide concrete options whose semantic effects are clear. Preserve the target when an edit would require unresolved design judgment.
+
+## Task: Terminology audit
+
+Find terms that conflict with the vocabulary established by the target.
+
+### Terminology rules
+
+#### Semantic drift
+
+Find two terms used for one concept when the target establishes one as canonical.
+
+## Decision policy
+
+Leave every `decision` as `null`. A recommendation is advisory and is not authorization.
+
+## Output
+
+Emit only the audit YAML.
+
+The audit must conform to the schema and use the example only as a shape reference.
+
+### Audit schema
+
+```yaml
+<the composed terminology-audit schema, including canonicalTerm>
+```
+
+### Example audit
+
+```yaml
+<the exampleAudit above>
+```
+````
+
+With that reviewed audit, the application template independently renders:
+
+````md
+# Semantic audit application
+
+## Stage
+
+Apply only the decisions authorized in the supplied audit. The analysis is complete. Do not search for new findings, broaden existing findings, or perform opportunistic cleanup.
+
+## Inputs
+
+target.md is the terminology document to update.
+
+### Audit
+
+```yaml
+task:
+  id: terminology-audit
+sources:
+  - file: target.md
+    role: target
+summary:
+  findings:
+    total: 1
+    decided: 1
+    open: 0
+    applied: 0
+    kept: 0
+    blocked: 0
+findings:
+  T1:
+    location:
+      file: target.md
+      section: API reference
+      anchor: client token
+    related_locations: []
+    scope: local
+    excerpt: 'The client token authenticates each request.'
+    issue: The target uses client token for the canonical access token.
+    priority: medium
+    confidence: high
+    options:
+      A:
+        action: replace
+        description: Use the canonical term access token.
+        replacement: 'The access token authenticates each request.'
+        risk: low
+    recommendation: A
+    decision: A
+    note: null
+    execution: null
+    payload:
+      canonicalTerm: access token
+```
+
+## Authority
+
+For each finding, use `decision` first and `note` second. The recommendation is advisory only.
+
+- An option key selects that option.
+- `custom` applies only the instruction in `note`.
+- `reject`, `defer`, and `null` make no target change.
+- A selected `keep` option records a kept outcome without changing the target.
+
+## Application method
+
+Locate the exact material using the stable location and verbatim excerpt. Apply the smallest change that fulfills the selected option or custom note. Preserve surrounding semantics and structure.
+
+After a successful content change, record an `applied` execution result and describe the actual operation. Record `kept` for a selected keep option. If the source no longer matches safely or validation fails, leave that location unchanged and record `blocked`. Leave execution null for rejected, deferred, and open findings.
+
+Preserve every analysis field. Update only execution data, derived summary values, and task-defined after-application diagnostics.
+
+## Task specification: Terminology audit
+
+Find semantic terminology drift.
+
+### Objective
+
+Find terms that conflict with the vocabulary established by the target.
+
+### Terminology rules
+
+#### Semantic drift
+
+Find two terms used for one concept when the target establishes one as canonical.
+
+### Replacement discipline
+
+Change only references covered by the selected finding.
+
+## Audit contract
+
+The updated audit must preserve the supplied findings and conform to this composed contract. Task-specific payload schemas are included here.
+
+### Audit schema
+
+```yaml
+<the composed terminology-audit schema, including canonicalTerm>
+```
+
+## Validation
+
+Confirm that every target change corresponds to an actionable decision, unresolved findings remain unchanged, protected semantics remain intact, and the resulting artifact remains structurally valid.
+
+## Output
+
+Emit the updated target and audit YAML.
+````
+
 ## Development
 
 Semantic Audit currently links to the experimental Tempalace checkout in the adjacent repository.

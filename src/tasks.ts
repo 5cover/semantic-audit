@@ -1,6 +1,6 @@
 import { template, zod as z } from '@tempalace/core'
 
-import YAML from 'yaml'
+import { parse } from 'yaml'
 import { createAuditSchemas } from './schema.js'
 import { renderAnalysisPrompt, renderApplicationPrompt } from './prompts.js'
 import type { AuditTask, AuditTaskDefinition, AuditValidationResult, DecisionMode } from './types.js'
@@ -61,7 +61,7 @@ function validateDefinition(definition: AuditTaskDefinition) {
 function formatIssues(error: z.ZodError) {
   return error.issues.map(issue => {
     const path = issue.path.length === 0 ? '<root>' : issue.path.join('.')
-    return `${path}: ${issue.message}`
+    return `${path}: ${issue}`
   })
 }
 
@@ -120,7 +120,7 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
   })
 
   const schema = template({
-    name: `$ {definition.name}: schema`,
+    name: `${definition.name}: schema`,
     description: `Render the composed audit schema for ${definition.name}.`,
     output: z.string(),
     run: () => stringifyYaml(auditJsonSchema),
@@ -135,9 +135,9 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
 
   function validateAuditYaml(source: string): AuditValidationResult {
     try {
-      return validateAudit(YAML.parse(source))
+      return validateAudit(parse(source))
     } catch (error) {
-      return { success: false, issues: [error instanceof Error ? error.message : String(error)] }
+      return { success: false, issues: [String(error)] }
     }
   }
 
