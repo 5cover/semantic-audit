@@ -58,13 +58,6 @@ function validateDefinition(definition: AuditTaskDefinition) {
   }
 }
 
-function formatIssues(error: z.ZodError) {
-  return error.issues.map(issue => {
-    const path = issue.path.length === 0 ? '<root>' : issue.path.join('.')
-    return `${path}: ${issue}`
-  })
-}
-
 type SupportedDecisionMode<Definition extends AuditTaskDefinition> = Definition extends {
   readonly automaticDecisions: { readonly criteria: readonly string[] }
 }
@@ -80,6 +73,7 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
     target: 'draft-2020-12',
     reused: 'inline',
     override: ctx => {
+      if (ctx.jsonSchema.additionalProperties === false) delete ctx.jsonSchema.additionalProperties
       if (
         ctx.jsonSchema.type === 'integer' ||
         (Array.isArray(ctx.jsonSchema.type) && ctx.jsonSchema.type.includes('integer'))
@@ -130,7 +124,7 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
     const result = auditSchema.safeParse(value)
     return result.success
       ? { success: true, data: result.data }
-      : { success: false, issues: formatIssues(result.error) }
+      : { success: false, issues: [z.prettifyError(result.error)] }
   }
 
   function validateAuditYaml(source: string): AuditValidationResult {

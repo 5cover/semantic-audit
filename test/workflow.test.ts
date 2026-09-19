@@ -54,7 +54,11 @@ test('findings reject the replaced current field', () => {
 
   const result = scenarioSalience.validateAudit(audit)
   assert.equal(result.success, false)
-  if (!result.success) assert(result.issues.some(issue => issue.includes('Unrecognized key')))
+  if (!result.success)
+    assert(
+      result.issues.some(issue => issue.includes('Unrecognized key')),
+      result.issues.join(',')
+    )
 })
 
 test('custom decisions require a note', () => {

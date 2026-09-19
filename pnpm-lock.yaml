@@ -11,6 +11,9 @@ importers:
       '@tempalace/core':
         specifier: ^0.1.0
         version: 0.1.0
+      interner:
+        specifier: ^1.0.0
+        version: 1.0.0
       yaml:
         specifier: ^2.9.1
         version: 2.9.1
@@ -202,6 +205,10 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
+  interner@1.0.0:
+    resolution: {integrity: sha512-Bkdl4k2dqusiE508jWpP3FHQHPGr3AkUe4ltA13iY1fDuYML0C0YUtc9UDfHBkIYKIIkilltG91pkOrdbsLYOg==}
+    engines: {node: '>=22.0.0'}
+
   jiti@2.7.0:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
@@ -352,6 +359,8 @@ snapshots:
 
   fsevents@2.3.3:
     optional: true
+
+  interner@1.0.0: {}
 
   jiti@2.7.0: {}
 
