@@ -14,7 +14,7 @@ function renderRules(definition: AuditTaskDefinition) {
     .map(group => {
       const rules = group.rules
         .map(rule => {
-          const parts = [section(4, rule.title, rule.description)]
+          const parts = [section(4, `\`${rule.id}\` ${rule.title}`, rule.description)]
           if (rule.signals?.length) parts.push(section(5, 'Discovery signals', list(rule.signals)))
           if (rule.questions?.length) parts.push(section(5, 'Review questions', list(rule.questions)))
           if (rule.nonFindings?.length) parts.push(section(5, 'Do not report', list(rule.nonFindings)))
