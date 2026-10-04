@@ -20,7 +20,7 @@ export interface AuditRule {
   readonly description: string
   readonly signals?: readonly string[]
   readonly questions?: readonly string[]
-  readonly nonFindings?: readonly string[]
+  readonly exceptions?: readonly string[]
   readonly resolutions?: readonly string[]
 }
 
@@ -81,6 +81,7 @@ export interface AuditTask<Mode extends DecisionMode = DecisionMode> {
   readonly templates: {
     readonly analyze: ParameterizedTemplate<AnalysisTemplateInput<Mode>, string>
     readonly apply: ParameterizedTemplate<ApplicationTemplateInput, string>
+    readonly prevent: InputlessTemplate<string>
     readonly schema: InputlessTemplate<string>
   }
   validateAudit(value: unknown): AuditValidationResult

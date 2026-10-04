@@ -2,11 +2,12 @@
 
 Semantic Audit is a reusable audit-then-apply workflow for LLM-assisted review. It is intended for issues that behave like lint rules but require semantic, cross-cutting judgment rather than syntax or keyword matching.
 
-The workflow separates three concerns:
+The workflow supports a preventative policy and separates the audit workflow into three concerns:
 
-1. Analysis reads the complete target and produces a structured YAML audit without modifying it.
-2. A user reviews the options and fills each finding's `decision` and optional `note`.
-3. Application changes only findings with an explicit actionable decision and records the outcome.
+1. Prevention renders a policy block to add to a document-generation prompt before the document exists.
+2. Analysis reads the complete target and produces a structured YAML audit without modifying it.
+3. A user reviews the options and fills each finding's `decision` and optional `note`.
+4. Application changes only findings with an explicit actionable decision and records the outcome.
 
 Recommendations are advisory. The default analysis mode leaves every decision at `null`, so passing an untouched audit to the application stage makes no changes.
 
@@ -28,6 +29,8 @@ const prompt = await scenarioSalience.templates.analyze.run({
   decisionMode: 'manual',
   output: 'Emit the audit YAML only.',
 })
+
+const preventionPolicy = await scenarioSalience.templates.prevent.run()
 ```
 
 Only `scenarioSalience` supports `decisionMode: "safe"`. In that opt-in mode, the analysis may copy a safe recommendation option key into `decision`. There is no separate `auto_apply` field.
@@ -54,17 +57,20 @@ Validation checks both structure and relationships that JSON Schema cannot expre
 
 ## Tempalace registry
 
-The root `templates.ts` registry exposes three entries per built-in task:
+The root `templates.ts` registry exposes four entries per built-in task:
 
 ```text
 report-compression.analyze
 report-compression.apply
+report-compression.prevent
 report-compression.schema
 banknote-proposal-lint.analyze
 banknote-proposal-lint.apply
+banknote-proposal-lint.prevent
 banknote-proposal-lint.schema
 scenario-salience.analyze
 scenario-salience.apply
+scenario-salience.prevent
 scenario-salience.schema
 ```
 
@@ -72,6 +78,7 @@ For example:
 
 ```sh
 tp scenario-salience.analyze +inputs "Audit scenario.md" +decisionMode safe
+tp scenario-salience.prevent
 tp scenario-salience.schema
 ```
 
@@ -86,6 +93,10 @@ tp scenario-salience.schema
 - application guidance;
 - a valid minimal audit example;
 - optional safe-decision criteria.
+
+Every task also exposes an inputless `task.templates.prevent.run()` template. It renders a pasteable generation policy
+from the protected model and neutral rule definitions, including signals, questions, preservation exceptions, and
+resolution guidance. It never produces an audit or requires an audit schema.
 
 ```ts
 import { defineAuditTask } from 'semantic-audit'

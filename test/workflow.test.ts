@@ -3,11 +3,12 @@ import test from 'node:test'
 import { template, validateRegistry } from '@tempalace/core'
 import { parse } from 'yaml'
 import { registry } from '../src/registry.js'
-import { banknoteProposalLint, reportCompression, scenarioSalience } from '../src/tasks/index.js'
+import { banknoteProposalLint, chapterConformance, reportCompression, scenarioSalience } from '../src/tasks/index.js'
 import { stringifyYaml } from '../src/util.js'
 import { analysisOutputEmit } from '../src/prompts.js'
 
-const tasks = [reportCompression, banknoteProposalLint, scenarioSalience]
+const tasks = [reportCompression, banknoteProposalLint, scenarioSalience, chapterConformance]
+const registeredTasks = [reportCompression, banknoteProposalLint, scenarioSalience]
 
 test('all built-in examples satisfy their composed contracts', () => {
   for (const task of tasks) {
@@ -100,8 +101,8 @@ test('manual analysis prompt is neutral, nested, and non-authorizing', async () 
 
   assert.equal(prompt.match(/^# /gm)?.length, 1)
   assert.match(prompt, /^## Generic method/m)
-  assert.match(prompt, /^### Finding families/m)
-  assert.match(prompt, /^#### Counterfactual salience/m)
+  assert.match(prompt, /^### Salience risks/m)
+  assert.match(prompt, /^#### `counterfactual` Counterfactual salience/m)
   assert.match(prompt, /Leave every `decision` as `null`/)
   assert.match(prompt, /short, verbatim `excerpt`/)
   assert.doesNotMatch(prompt, /\[object Object\]/)
@@ -153,7 +154,7 @@ test('application prompt applies decisions without discovering findings', async 
   assert.match(prompt, /`reject`, `defer`, and `null` make no target change/)
   assert.match(prompt, /Preserve every analysis field/)
   assert.match(prompt, /^## Task specification: Banknote proposal lint/m)
-  assert.match(prompt, /^### Detector families/m)
+  assert.match(prompt, /^### Specification risks/m)
   assert.match(prompt, /^## Audit contract/m)
   assert.match(prompt, /banknote_series_design_proposal/)
 })
@@ -185,12 +186,33 @@ test('task schema templates retain their inputless interfaces', async () => {
   assert.equal((parse(source) as { $schema: unknown }).$schema, 'https://json-schema.org/draft/2020-12/schema')
 })
 
+test('preventative templates render inputless generation policies', async () => {
+  for (const task of tasks) {
+    const prompt = await task.templates.prevent.run()
+    assert.match(prompt, /^# Semantic audit prevention/m)
+    assert.match(prompt, /Do not perform an audit, enumerate findings, explain the policy, or emit a checklist/)
+    assert.match(prompt, /Return only the artifact requested by the surrounding prompt/)
+    assert.doesNotMatch(prompt, /Audit schema/)
+  }
+
+  const scenarioPolicy = template({
+    name: 'scenario prevention',
+    output: scenarioSalience.templates.prevent.output,
+    run: () => scenarioSalience.templates.prevent.run(),
+  })
+  const prompt = await scenarioPolicy.run()
+  assert.match(prompt, /^### Salience risks/m)
+  assert.match(prompt, /^#### `counterfactual` Counterfactual salience/m)
+  assert.match(prompt, /^##### Preservation exceptions/m)
+})
+
 test('the root Tempalace registry exposes all built-in phases', () => {
   const validated = validateRegistry(registry)
-  assert.equal(Object.keys(validated).length, 9)
-  for (const task of tasks) {
+  assert.equal(Object.keys(validated).length, 12)
+  for (const task of registeredTasks) {
     assert(`${task.id}.analyze` in validated)
     assert(`${task.id}.apply` in validated)
+    assert(`${task.id}.prevent` in validated)
     assert(`${task.id}.schema` in validated)
   }
 })

@@ -85,14 +85,14 @@ export const scenarioSalience = defineAuditTask({
     ruleGroups: [
       {
         id: 'scenario-families',
-        title: 'Finding families',
+        title: 'Salience risks',
         rules: [
           {
             id: 'counterfactual',
             title: 'Counterfactual salience',
-            description: `Find passages that specify the selected state by also naming an unwanted alternative that does not contribute to the story.`,
+            description: `Specifying selected story state by naming an unwanted alternative that does not contribute to the story creates counterfactual salience.`,
             signals: ['rather than, but not, instead of, without', 'avoid, do not turn, no need'],
-            nonFindings: [
+            exceptions: [
               'A live strategic choice.',
               'A consequential legal, epistemic, physical, or technical boundary.',
             ],
@@ -100,17 +100,17 @@ export const scenarioSalience = defineAuditTask({
           {
             id: 'defensive',
             title: 'Defensive or prophylactic specification',
-            description: `Find material whose principal function is to prevent an imagined generator misunderstanding already excluded by a complete positive specification.`,
-            nonFindings: [
+            description: `Material whose principal function is to prevent an imagined generator misunderstanding already excluded by a complete positive specification creates defensive specification.`,
+            exceptions: [
               'Negative facts, refusals, failures, prohibitions, exclusions, and absences that change the story.',
             ],
           },
           {
             id: 'modal',
             title: 'Resolved propositions modalized as preferences',
-            description: `Find settled events or narrative properties expressed as should, may, might, could, ideally, preferably, or similar authorial uncertainty.`,
+            description: `Settled events or narrative properties expressed as should, may, might, could, ideally, preferably, or similar authorial uncertainty create unnecessary modal ambiguity.`,
             resolutions: ['State the settled property declaratively when scope and meaning remain identical.'],
-            nonFindings: [
+            exceptions: [
               'Character uncertainty.',
               'Legal or physical possibility.',
               'A reusable normative generation invariant.',
@@ -119,48 +119,48 @@ export const scenarioSalience = defineAuditTask({
           {
             id: 'imperative',
             title: 'Writer-addressed imperatives',
-            description: `Find direct commands to write, show, narrate, dramatize, keep, avoid, or foreground when the same information belongs as a property of the selected artifact.`,
-            nonFindings: ['A global generation policy whose scope would change when declarativized.'],
+            description: `Direct commands to write, show, narrate, dramatize, keep, avoid, or foreground are unnecessary when the same information belongs as a property of the selected artifact.`,
+            exceptions: ['A global generation policy whose scope would change when declarativized.'],
           },
           {
             id: 'rationale',
             title: 'Authorial rationale in generator-facing text',
-            description: `Find design history, rejected branches, thematic explanations, and warnings that remain useful to the author but not to generation.`,
+            description: `Design history, rejected branches, thematic explanations, and warnings useful to the author but not to generation should not remain generator-facing.`,
             resolutions: ['Move useful rationale to a blockquote.', 'Remove rationale with no continuing value.'],
           },
           {
             id: 'scaffolding',
             title: 'Interpretive scaffolding and reader management',
-            description: `Find sentences that classify, preview, or announce significance already demonstrated by adjacent story information.`,
+            description: `Sentences that classify, preview, or announce significance already demonstrated by adjacent story information create interpretive scaffolding.`,
             signals: ['the distinction is important', 'this matters because', 'importantly, crucially'],
           },
           {
             id: 'perimeter',
             title: 'Scope-perimeter narration',
-            description: `Find propositions defined through an exhaustive outside perimeter when the selected positive scope is sufficient.`,
-            nonFindings: ['Exclusions that actively determine law, evidence, knowledge, causality, or action.'],
+            description: `Defining propositions through an exhaustive outside perimeter is unnecessary when the selected positive scope is sufficient.`,
+            exceptions: ['Exclusions that actively determine law, evidence, knowledge, causality, or action.'],
           },
           {
             id: 'rederivation',
             title: 'Re-derivation of established information',
-            description: `Find later passages that reconstruct an established mechanism or causal chain when only its changed consequence or significance is active.`,
-            nonFindings: ['Repeated information whose function has changed.'],
+            description: `Reconstructing an established mechanism or causal chain is unnecessary when only its changed consequence or significance is active.`,
+            exceptions: ['Repeated information whose function has changed.'],
           },
           {
             id: 'duplicate-instruction',
             title: 'Duplicate realization instructions',
-            description: `Find generation instructions that merely repeat an already-selected story state without governing a separate realization choice.`,
+            description: `Generation instructions that merely repeat an already-selected story state without governing a separate realization choice add duplicate realization guidance.`,
           },
           {
             id: 'empty-precision',
             title: 'Empty precision or classification language',
-            description: `Find analytical labels such as narrow, precise, bounded, meaningful, or procedural that do not identify an actual dimension of scope.`,
+            description: `Analytical labels such as narrow, precise, bounded, meaningful, or procedural are empty when they do not identify an actual dimension of scope.`,
           },
           {
             id: 'thesis',
             title: 'Thesis and significance restatement',
-            description: `Find instructions that ask eventual prose to state a conclusion already carried by the specified events.`,
-            nonFindings: ['An interpretation that genuinely occurs in a character or institution.'],
+            description: `Instructions that ask eventual prose to state a conclusion already carried by the specified events create thesis or significance restatement.`,
+            exceptions: ['An interpretation that genuinely occurs in a character or institution.'],
           },
         ],
       },

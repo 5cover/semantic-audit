@@ -2,7 +2,7 @@ import { template, zod as z } from '@tempalace/core'
 
 import { parse } from 'yaml'
 import { createAuditSchemas } from './schema.js'
-import { renderAnalysisPrompt, renderApplicationPrompt } from './prompts.js'
+import { renderAnalysisPrompt, renderApplicationPrompt, renderPreventionPrompt } from './prompts.js'
 import type { AuditTask, AuditTaskDefinition, AuditValidationResult, DecisionMode } from './types.js'
 import { stringifyYaml } from './util.js'
 
@@ -113,6 +113,13 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
     run: input => renderApplicationPrompt({ definition, auditJsonSchema, ...input }),
   })
 
+  const prevent = template({
+    name: `${definition.name}: prevent`,
+    description: `Render the preventative policy for ${definition.name}.`,
+    output: z.string(),
+    run: () => renderPreventionPrompt(definition),
+  })
+
   const schema = template({
     name: `${definition.name}: schema`,
     description: `Render the composed audit schema for ${definition.name}.`,
@@ -147,7 +154,7 @@ export function defineAuditTask<const Definition extends AuditTaskDefinition>(
     definition,
     auditSchema,
     auditJsonSchema,
-    templates: { analyze, apply, schema },
+    templates: { analyze, apply, prevent, schema },
     validateAudit,
     validateAuditYaml,
   } as AuditTask<SupportedDecisionMode<Definition>>

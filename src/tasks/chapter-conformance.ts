@@ -57,7 +57,7 @@ A chapter may differ from how the final scenario would now cause a fresh generat
             id: 'conflict',
             title: 'Story conflict',
             description: `
-Find facts, chronology, causal relationships, knowledge states, legal or evidentiary states, technical boundaries, or live alternatives in the chapter that conflict with the final scenario.
+Facts, chronology, causal relationships, knowledge states, legal or evidentiary states, technical boundaries, and live alternatives in the chapter must remain compatible with the final scenario.
 
 Do not report harmless differences in wording, emphasis, ordering, or incidental detail when both realizations remain compatible with the same selected story state.
 `,
@@ -66,7 +66,7 @@ Do not report harmless differences in wording, emphasis, ordering, or incidental
             id: 'missing-required-state',
             title: 'Missing required story material',
             description: `
-Find final-scenario material absent from the chapter only when that absence matters: the scenario marks it as a required event, later causality or knowledge depends on it, or the chapter must establish it for a later handoff.
+Final-scenario material must appear in the chapter when the scenario marks it as a required event, later causality or knowledge depends on it, or the chapter must establish it for a later handoff.
 
 Absence by itself is not a finding. Scenario detail may remain implicit, off-page, or unused unless the final scenario makes its presence consequential.
 `,
@@ -82,14 +82,14 @@ Absence by itself is not a finding. Scenario detail may remain implicit, off-pag
             id: 'incoming-state',
             title: 'Incoming state',
             description: `
-Find cases where the chapter begins from a state incompatible with the final scenario's chronology, prior consequences, knowledge, custody status, access limits, evidence state, relationships, or other established conditions.
+The chapter must begin from a state compatible with the final scenario's chronology, prior consequences, knowledge, custody status, access limits, evidence state, relationships, and other established conditions.
 `,
           },
           {
             id: 'outgoing-state',
             title: 'Outgoing handoff',
             description: `
-Find cases where the chapter fails to establish state that the final scenario requires later chapters to inherit, or establishes a materially different state.
+The chapter must establish the state that the final scenario requires later chapters to inherit without creating a materially different state.
 `,
           },
         ],
@@ -105,14 +105,14 @@ Find cases where the chapter fails to establish state that the final scenario re
             description: `
 Treat explicit final-scenario decisions about narrative resolution as requirements, especially the chapter's "Procedural dramatization" section.
 
-Compare the current manuscript with the selected resolution: direct scene, compressed process, selective transcript, document, playback, off-page event, or other explicitly assigned mode. Report a finding when the draft realizes materially different resolution even if the underlying facts are technically present.
+The chapter's selected resolution, whether direct scene, compressed process, selective transcript, document, playback, off-page event, or another assigned mode, must match the final scenario even when the underlying facts are present.
 `,
           },
           {
             id: 'procedural-selection',
             title: 'Procedural scene selection',
             description: `
-Check whether events the final scenario specifically assigns to direct dramatization are actually experienced at that resolution, and whether process explicitly assigned to compression remains compressed.
+Events the final scenario assigns to direct dramatization must be experienced at that resolution, while process assigned to compression must remain compressed.
 
 Do not demand exhaustive procedure. The final scenario's selection of what deserves scene time controls.
 `,
@@ -135,7 +135,7 @@ Where the final scenario explicitly assigns transcript, documentary, playback, o
             id: 'behavior',
             title: 'Behavioral continuity',
             description: `
-Find behavior, choices, motives, or relationship state that materially conflict with the final cross-cutting character model or with changes that the final scenario now requires to accumulate across chapters.
+Behavior, choices, motives, and relationship state must remain compatible with the final cross-cutting character model and changes that the final scenario requires to accumulate across chapters.
 
 Do not retrofit abstract characterization labels onto prose that already embodies a compatible character state.
 `,
@@ -144,7 +144,7 @@ Do not retrofit abstract characterization labels onto prose that already embodie
             id: 'strategy',
             title: 'Strategic continuity',
             description: `
-For characters whose strategy matters across chapters, report choices that break the final scenario's selected objectives or decision logic when the mismatch changes story causality or later interpretation.
+For characters whose strategy matters across chapters, choices must preserve the final scenario's selected objectives and decision logic when they affect story causality or later interpretation.
 
 Do not report a newer cross-cutting generation instruction merely because an older chapter was written before that instruction existed.
 `,
@@ -182,7 +182,7 @@ Use local when the issue can be resolved without materially rebuilding a scene.
 Use scene when a scene must be inserted, expanded, compressed, or substantially reworked.
 Use structural only when the chapter's sequencing or multiple scenes must change.
 
-Also state how much existing prose appears reusable. This is an audit estimate, not authorization to rewrite.
+The change magnitude and degree of existing-prose reuse must remain explicit when the rule is used for review.
 `,
           },
         ],

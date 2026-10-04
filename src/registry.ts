@@ -3,12 +3,15 @@ import { banknoteProposalLint, reportCompression, scenarioSalience } from './tas
 export const registry = {
   'report-compression.analyze': reportCompression.templates.analyze,
   'report-compression.apply': reportCompression.templates.apply,
+  'report-compression.prevent': reportCompression.templates.prevent,
   'report-compression.schema': reportCompression.templates.schema,
   'banknote-proposal-lint.analyze': banknoteProposalLint.templates.analyze,
   'banknote-proposal-lint.apply': banknoteProposalLint.templates.apply,
+  'banknote-proposal-lint.prevent': banknoteProposalLint.templates.prevent,
   'banknote-proposal-lint.schema': banknoteProposalLint.templates.schema,
   'scenario-salience.analyze': scenarioSalience.templates.analyze,
   'scenario-salience.apply': scenarioSalience.templates.apply,
+  'scenario-salience.prevent': scenarioSalience.templates.prevent,
   'scenario-salience.schema': scenarioSalience.templates.schema,
 } as const
 

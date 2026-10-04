@@ -108,13 +108,13 @@ export const reportCompression = defineAuditTask({
           {
             id: 'macro',
             title: 'Compression macro',
-            description: `Rechercher les développements disproportionnés, répétitions entre sections, exemples redondants, détails techniques excessifs et contenus qui peuvent être fusionnés, supprimés, condensés ou déplacés en annexe.`,
+            description: `Les développements disproportionnés, répétitions entre sections, exemples redondants, détails techniques excessifs et contenus pouvant être fusionnés, supprimés, condensés ou déplacés en annexe réduisent la densité du rapport.`,
             questions: [
               `Quelle fonction argumentative le passage remplit-il?`,
               `Cette fonction est-elle déjà remplie ailleurs?`,
               `Son volume est-il proportionné à son importance?`,
             ],
-            nonFindings: [
+            exceptions: [
               `Une idée répétée dans un nouveau rôle argumentatif.`,
               `Un développement long qui porte un raisonnement essentiel.`,
             ],
@@ -122,13 +122,13 @@ export const reportCompression = defineAuditTask({
           {
             id: 'micro',
             title: 'Compression micro',
-            description: `Rechercher les phrases sans apport, redondances locales, formulations indirectes, transitions vides, métadiscours et chaînes causales qui peuvent être exprimées plus densément.`,
+            description: `Les phrases sans apport, redondances locales, formulations indirectes, transitions vides, métadiscours et chaînes causales exprimables plus densément réduisent la concision du rapport.`,
             resolutions: [
               `Fusionner des phrases ou paragraphes.`,
               `Remplacer par une formulation plus directe.`,
               `Supprimer uniquement la portion sans fonction.`,
             ],
-            nonFindings: [
+            exceptions: [
               `Un simple synonyme plus court sans gain matériel.`,
               `Une séparation de phrases qui protège le rythme ou la distinction entre fait et interprétation.`,
             ],
@@ -136,7 +136,7 @@ export const reportCompression = defineAuditTask({
           {
             id: 'structural',
             title: 'Compression structurelle',
-            description: `Inspecter la composition PDF pour trouver les zones blanches, figures ou tableaux provoquant des sauts coûteux, titres orphelins, espacements cumulés et blocs Typst empêchant une coupure utile.`,
+            description: `Les zones blanches, figures ou tableaux provoquant des sauts coûteux, titres orphelins, espacements cumulés et blocs Typst empêchant une coupure utile dégradent la composition PDF.`,
             signals: [
               `Page faiblement remplie.`,
               `Figure isolée.`,
@@ -148,7 +148,7 @@ export const reportCompression = defineAuditTask({
               `Ajuster un espacement ou une coupure.`,
               `Combiner des éléments lorsque leur lecture reste claire.`,
             ],
-            nonFindings: [
+            exceptions: [
               `Réduire les marges, le corps ou l'interligne imposés.`,
               `Miniaturiser artificiellement le document.`,
             ],

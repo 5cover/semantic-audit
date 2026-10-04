@@ -49,178 +49,178 @@ const promptRules: readonly AuditRule[] = [
   rule(
     'unresolved-alternative',
     'Unresolved alternatives',
-    'Find executable descriptions that leave two materially different subjects, layouts, symbols, or scene concepts available.',
+    'Executable descriptions must resolve materially different subjects, layouts, symbols, or scene concepts.',
     ['or, either, one of, alternatively', 'branches that independently control the composition']
   ),
   rule(
     'soft-optionality',
     'Soft optionality',
-    'Find important visual elements described as optional even though their presence changes identity, hierarchy, or continuity.'
+    'Important visual elements must not remain optional when their presence changes identity, hierarchy, or continuity.'
   ),
   rule(
     'weak-preference',
     'Weak preference instead of decision',
-    'Find preferably, ideally, should, may, or similar wording where art direction needs a settled choice.'
+    'Art direction requiring a settled choice must not use preferably, ideally, should, may, or similar wording.'
   ),
   rule(
     'negative-sediment',
     'Negative sediment',
-    'Find obsolete prohibitions left behind after their positive replacement or canonical decision already exists.'
+    'Obsolete prohibitions must be removed when a positive replacement or canonical decision already exists.'
   ),
   rule(
     'broad-negation',
     'Broad or untestable negation',
-    'Find instructions such as avoid clutter that do not define an observable positive target.'
+    'Negative instructions such as avoid clutter must define an observable positive target.'
   ),
   rule(
     'contrastive-overdefinition',
     'Contrastive over-definition',
-    'Find targets defined mainly through rejected alternatives that may prime those alternatives during generation.'
+    'Targets must not be defined mainly through rejected alternatives that may prime those alternatives during generation.'
   ),
   rule(
     'enumeration-pressure',
     'Enumeration pressure',
-    'Find lists that give many objects equal semantic weight and make all of them compete for visible representation.'
+    'Lists must not give many objects equal semantic weight when they compete for visible representation.'
   ),
   rule(
     'additive-accumulation',
     'Additive instruction accumulation',
-    'Find repeated additions that exceed the available visual hierarchy instead of resolving priorities.'
+    'Repeated additions must resolve priorities rather than exceed the available visual hierarchy.'
   ),
   rule(
     'representation-channel',
     'Missing or weak representation channel',
-    'Find abstract concepts that are named without specifying the object, material, spatial, graphic, or lighting channel that depicts them.'
+    'Abstract concepts must specify the object, material, spatial, graphic, or lighting channel that depicts them.'
   ),
   rule(
     'abstract-visual-noun',
     'Abstract visual nouns and placeholder architecture',
-    'Find nouns such as innovation, culture, or infrastructure used as if they directly described a drawable subject.'
+    'Nouns such as innovation, culture, or infrastructure must not stand in for a drawable subject.'
   ),
   rule(
     'concept-leakage',
     'Concept leakage into executable prompts',
-    'Find analytical rationale or theme language that reaches the image prompt without a concrete visual role.'
+    'Analytical rationale or theme language must not reach an image prompt without a concrete visual role.'
   ),
   rule(
     'hierarchy',
     'Unspecified hierarchy',
-    'Find scenes with several major elements but no explicit dominant subject or ordering.'
+    'Scenes with several major elements require an explicit dominant subject or ordering.'
   ),
   rule(
     'cardinality',
     'Unspecified cardinality',
-    'Find plurals and collections whose count materially changes silhouette, density, or balance.'
+    'Plurals and collections require a count when it materially changes silhouette, density, or balance.'
   ),
   rule(
     'camera',
     'Unspecified camera or viewpoint',
-    'Find scenes whose geometry depends on viewpoint but whose shot, angle, distance, or orientation is missing.'
+    'Scenes whose geometry depends on viewpoint require a shot, angle, distance, or orientation.'
   ),
   rule(
     'camera-alternative',
     'Camera or spatial alternatives',
-    'Find prompts that offer incompatible cameras, viewpoints, or spatial arrangements.'
+    'Prompts must not offer incompatible cameras, viewpoints, or spatial arrangements.'
   ),
   rule(
     'relational-vagueness',
     'Relational vagueness',
-    'Find elements described as near, around, behind, connected, or integrated without enough spatial relation to stabilize composition.'
+    'Elements described as near, around, behind, connected, or integrated require enough spatial relation to stabilize composition.'
   ),
   rule(
     'relative-modifier',
     'Unbounded relative modifiers',
-    'Find larger, subtle, close, sparse, prominent, or similar comparative terms without a usable reference.'
+    'Comparative terms such as larger, subtle, close, sparse, or prominent require a usable reference.'
   ),
   rule(
     'style-construction',
     'Style adjectives without construction',
-    'Find style labels that lack concrete consequences for shape, material, palette, lighting, texture, or composition.'
+    'Style labels require concrete consequences for shape, material, palette, lighting, texture, or composition.'
   ),
   rule(
     'rendering-ambiguity',
     'Rendering ambiguity or mixed rendering vocabularies',
-    'Find incompatible rendering modes or vocabulary that can push generations toward different media.'
+    'Rendering modes and vocabulary must remain compatible rather than push generations toward different media.'
   ),
   rule(
     'recto-verso-duplication',
     'Recto-verso duplication',
-    'Find paired faces that restate the same subject, composition, and semantic function instead of forming a deliberate relationship.'
+    'Paired faces must form a deliberate relationship rather than restate the same subject, composition, and semantic function.'
   ),
   rule(
     'denomination-sameness',
     'Cross-denomination sameness',
-    'Find denominations whose protagonists or silhouettes are too similar to remain distinguishable as a series.'
+    'Denominations require distinguishable protagonists or silhouettes within the series.'
   ),
   rule(
     'rendering-drift',
     'Cross-denomination rendering drift',
-    'Find one denomination that departs from the series rendering grammar without a supported purpose.'
+    'Every denomination must follow the series rendering grammar unless a supported purpose justifies departure.'
   ),
   rule(
     'stale-residue',
     'Stale concept residue',
-    'Find superseded names, motifs, or choices still present in tables, prompts, accessibility text, or summaries.'
+    'Superseded names, motifs, or choices must not remain in tables, prompts, accessibility text, or summaries.'
   ),
   rule(
     'contradiction',
     'Cross-section contradiction',
-    'Find the same decision specified differently across rationale, prompt, continuity, evaluation, or summary sections.'
+    'The same decision must remain consistent across rationale, prompt, continuity, evaluation, and summary sections.'
   ),
   rule(
     'duplicated-rule',
     'Duplicated rules and local sediment',
-    'Find local copies of a shared rule that add no contextual behavior and can drift from the source of truth.'
+    'Local copies of a shared rule must add contextual behavior or be removed to prevent drift from the source of truth.'
   ),
   rule(
     'exceptions',
     'Repeated exception handling',
-    'Find repeated caveats that indicate the common rule is poorly scoped or the exception should be modeled once.'
+    'Repeated caveats require a better-scoped common rule or a single modeled exception.'
   ),
   rule(
     'false-precision',
     'False precision',
-    'Find exact values that do not correspond to a meaningful controllable variable or imply unjustified certainty.'
+    'Exact values must correspond to a meaningful controllable variable and avoid unjustified certainty.'
   ),
   rule(
     'missing-precision',
     'Missing precision in high-leverage variables',
-    'Find unspecified values for counts, hierarchy, camera, scale, placement, or representation when they strongly affect the result.'
+    'Counts, hierarchy, camera, scale, placement, and representation require values when they strongly affect the result.'
   ),
   rule(
     'workflow-leakage',
     'Workflow leakage into proposal',
-    'Find generation experiments, temporary prompts, rejected attempts, or process notes embedded in the selected proposal.'
+    'Generation experiments, temporary prompts, rejected attempts, and process notes must not remain in the selected proposal.'
   ),
   rule(
     'proposal-leakage',
     'Proposal leakage into reusable workflow',
-    'Find project-specific banknote decisions accidentally expressed as global generation rules.'
+    'Project-specific banknote decisions must not be expressed as global generation rules.'
   ),
   rule(
     'positive-refactor',
     'Negative-to-positive refactor opportunity',
-    'Find a specific positive target that can replace a vague or redundant negative instruction.'
+    'Vague or redundant negative instructions require a specific positive target.'
   ),
   rule(
     'choice-budget',
     'Choice-budget overload',
-    'Find scenes that leave several independent high-leverage variables unresolved at once.'
+    'Scenes must not leave several independent high-leverage variables unresolved at once.'
   ),
   rule(
     'noun-hierarchy',
     'Noun-hierarchy overload',
-    'Find too many concrete nouns competing for protagonist or secondary-subject status.'
+    'Concrete nouns must not compete excessively for protagonist or secondary-subject status.'
   ),
   rule(
     'normative-polarity',
     'Normative polarity',
-    'Compare positive requirements with negative restrictions and report imbalance only when it weakens executability.'
+    'Positive requirements and negative restrictions must remain balanced when imbalance would weaken executability.'
   ),
   rule(
     'resolution-symmetry',
     'Resolution symmetry',
-    'Check whether parallel denominations and paired faces are specified at comparable levels of visual resolution.'
+    'Parallel denominations and paired faces require comparable levels of visual resolution.'
   ),
 ]
 
@@ -316,7 +316,7 @@ export const banknoteProposalLint = defineAuditTask({
         body: `Check whether every denomination has a distinct visual proposition, whether recto and verso form an intentional pair, whether shared rules remain centralized, and whether prompts, tables, summaries, and rationale agree on the selected design.`,
       },
     ],
-    ruleGroups: [{ id: 'banknote-detectors', title: 'Detector families', rules: promptRules }],
+    ruleGroups: [{ id: 'banknote-detectors', title: 'Specification risks', rules: promptRules }],
     finalTest: `A finding must identify a concrete specification problem, explain how it affects generation or maintainability, and offer an action precise enough to apply after a human decision.`,
   },
   application: {

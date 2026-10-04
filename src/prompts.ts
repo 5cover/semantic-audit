@@ -9,16 +9,38 @@ function list(values: readonly string[]) {
   return values.map(value => `- ${value}`).join('\n')
 }
 
-function renderRules(definition: AuditTaskDefinition) {
+function renderRules(definition: AuditTaskDefinition, context: 'analysis' | 'prevention' | 'shared' = 'shared') {
+  const labels =
+    context === 'analysis'
+      ? {
+          signals: 'Discovery signals',
+          questions: 'Review questions',
+          exceptions: 'Preservation exceptions',
+          resolutions: 'Resolution guidance',
+        }
+      : context === 'prevention'
+        ? {
+            signals: 'Risk signals',
+            questions: 'Self-review questions',
+            exceptions: 'Preservation exceptions',
+            resolutions: 'Preferred resolutions',
+          }
+        : {
+            signals: 'Signals',
+            questions: 'Questions',
+            exceptions: 'Preservation exceptions',
+            resolutions: 'Resolution guidance',
+          }
+
   return definition.analysis.ruleGroups
     .map(group => {
       const rules = group.rules
         .map(rule => {
           const parts = [section(4, `\`${rule.id}\` ${rule.title}`, rule.description)]
-          if (rule.signals?.length) parts.push(section(5, 'Discovery signals', list(rule.signals)))
-          if (rule.questions?.length) parts.push(section(5, 'Review questions', list(rule.questions)))
-          if (rule.nonFindings?.length) parts.push(section(5, 'Do not report', list(rule.nonFindings)))
-          if (rule.resolutions?.length) parts.push(section(5, 'Typical resolutions', list(rule.resolutions)))
+          if (rule.signals?.length) parts.push(section(5, labels.signals, list(rule.signals)))
+          if (rule.questions?.length) parts.push(section(5, labels.questions, list(rule.questions)))
+          if (rule.exceptions?.length) parts.push(section(5, labels.exceptions, list(rule.exceptions)))
+          if (rule.resolutions?.length) parts.push(section(5, labels.resolutions, list(rule.resolutions)))
           return parts.join('\n\n')
         })
         .join('\n\n')
@@ -61,6 +83,22 @@ function renderTaskSpecification(definition: AuditTaskDefinition) {
   return parts.join('\n\n')
 }
 
+export function renderPreventionPrompt(definition: AuditTaskDefinition) {
+  const taskParts = [renderRules(definition, 'prevention')]
+  if (definition.analysis.protectedModel !== undefined) {
+    taskParts.unshift(section(3, 'Protected model', definition.analysis.protectedModel))
+  }
+
+  return `# Semantic audit prevention
+
+${section(2, 'Use', `Add this policy to the prompt that produces the requested artifact. Follow it while creating the artifact. Do not perform an audit, enumerate findings, explain the policy, or emit a checklist.`)}
+
+${section(2, `Task: ${definition.name}`, taskParts.join('\n\n'))}
+
+${section(2, 'Final discipline', `Treat every rule as a constraint on the produced artifact. Preserve the stated exceptions and use the preferred resolutions when they apply. Return only the artifact requested by the surrounding prompt.`)}
+`
+}
+
 export function renderAnalysisPrompt(options: {
   definition: AuditTaskDefinition
   inputs: string
@@ -96,6 +134,8 @@ Infer the target's actual semantics, functions, contracts, and protected propert
 
 Search broadly using lexical, structural, comparative, and semantic signals. A surface match is evidence for inspection, not a finding by itself.
 
+Use each task rule as a neutral condition to detect in the target. Its signals, questions, exceptions, and resolution guidance define how to investigate and adjudicate that condition.
+
 ### Adjudicate with evidence
 
 Report only concrete mismatches supported by the target or its references. Do not report generic best practices without project-specific evidence. Every finding must include a short, verbatim \`excerpt\` from the target that makes it immediately recognizable. For cluster, cross-section, or global findings, use one representative instance. Consider relationships between distant producers, consumers, sections, and representations.
@@ -109,7 +149,7 @@ Create one finding per independently reviewable root decision. Combine repeated 
 Provide concrete options whose semantic effects are clear. Preserve the target when an edit would require unresolved design judgment.`
 )}
 
-${section(2, `Task: ${definition.name}`, `${definition.analysis.objective.trim()}${taskInputs}${protectedModel}\n\n${taskSections}\n\n${renderRules(definition)}${definition.analysis.finalTest === undefined ? '' : `\n\n${section(3, 'Final test', definition.analysis.finalTest)}`}`)}
+${section(2, `Task: ${definition.name}`, `${definition.analysis.objective.trim()}${taskInputs}${protectedModel}\n\n${taskSections}\n\n${renderRules(definition, 'analysis')}${definition.analysis.finalTest === undefined ? '' : `\n\n${section(3, 'Final test', definition.analysis.finalTest)}`}`)}
 
 ${section(2, 'Decision policy', decisionPolicy(definition, options.decisionMode))}
 
