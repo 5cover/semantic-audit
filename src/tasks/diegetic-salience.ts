@@ -22,10 +22,11 @@ const kinds = [
 
 const owners = ['story', 'author', 'none', 'mixed', 'unclear'] as const
 
-export const scenarioSalience = defineAuditTask({
-  id: 'scenario-salience',
-  name: 'Scenario salience',
-  description: 'Audit an annotated scenario for context that gives a chapter generator unwanted semantic salience.',
+export const diegeticSalience = defineAuditTask({
+  id: 'diegetic-salience',
+  name: 'Diegetic salience',
+  description:
+    'Audit an annotated diegetic document, such as a scenario, lore book, or other writer-support document, for context that gives a generator unwanted semantic salience.',
   actions: ['keep', 'replace', 'remove', 'move', 'split', 'merge', 'deduplicate', 'restructure', 'other'],
   schemas: {
     taskPayload: z.strictObject({
@@ -72,19 +73,19 @@ export const scenarioSalience = defineAuditTask({
     ],
   },
   analysis: {
-    objective: `Audit the complete annotated scenario for information that artificially enlarges it or gives the chapter generator unnecessary semantic votes toward stories, interpretations, emphases, explanations, or realizations outside the selected story. This is not general compression.`,
-    inputs: `The primary target is the complete annotated scenario. Ordinary Markdown reaches the chapter generator. Markdown blockquotes are author-facing annotations stripped before generation. Use style, typography, canon, or other policy files only when explicitly supplied as references.`,
+    objective: `Audit the complete annotated diegetic document for information that artificially enlarges it or gives the generator unnecessary semantic votes toward stories, interpretations, emphases, explanations, or realizations outside the selected story. This is not general compression.`,
+    inputs: `The primary target is the complete annotated diegetic document, such as a scenario, lore book, or other writer-support document. Ordinary Markdown reaches the generator. Markdown blockquotes are author-facing annotations stripped before generation. Use style, typography, canon, or other policy files only when explicitly supplied as references.`,
     protectedModel: `Preserve selected story state, chronology, causality, characterization, character and institutional knowledge, live alternatives, legal and evidentiary distinctions, technical and physical boundaries, narrative-resolution properties, headings, exact quoted dialogue, and existing author annotations.`,
     sections: [
       {
-        id: 'scenario-ownership',
+        id: 'diegetic-ownership',
         title: 'Information ownership',
         body: `Classify questionable information as story, author, none, mixed, or unclear. Story information remains generator-facing. Useful design history belongs in an author annotation. Information useful to neither can be removed. Mixed material should be split only when its parts can be preserved safely. Unclear ownership requires manual review.`,
       },
     ],
     ruleGroups: [
       {
-        id: 'scenario-families',
+        id: 'diegetic-families',
         title: 'Salience risks',
         rules: [
           {
@@ -165,17 +166,17 @@ export const scenarioSalience = defineAuditTask({
         ],
       },
     ],
-    finalTest: `Treat the scenario as a finished specification, not a record of the reasoning that produced it. Ask whether the chapter generator benefits from knowing each questionable passage.`,
+    finalTest: `Treat the diegetic document as a finished specification, not a record of the reasoning that produced it. Ask whether the generator benefits from knowing each questionable passage.`,
   },
   application: {
     sections: [
       {
-        id: 'scenario-apply-ownership',
+        id: 'diegetic-apply-ownership',
         title: 'Ownership-preserving edits',
         body: `Keep story-owned information in ordinary Markdown. Move author-owned information only to Markdown blockquotes. When splitting mixed material, preserve each part in its correct layer without inventing rationale.`,
       },
       {
-        id: 'scenario-apply-semantics',
+        id: 'diegetic-apply-semantics',
         title: 'Semantic preservation',
         body: `Do not replace a removed hypothetical with a synonym, change possibility into fact, erase a live alternative, remove a repeated fact whose function changed, or alter protected annotations. Preserve the selected story state after every edit.`,
       },
@@ -183,7 +184,7 @@ export const scenarioSalience = defineAuditTask({
   },
   exampleAudit: {
     task: {
-      id: 'scenario-salience',
+      id: 'diegetic-salience',
       payload: {
         author_annotation_format: 'markdown_blockquote',
         generator_facing_content: 'Ordinary Markdown reaches the chapter generator; blockquotes do not.',

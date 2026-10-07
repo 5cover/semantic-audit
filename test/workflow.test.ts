@@ -3,12 +3,12 @@ import test from 'node:test'
 import { template, validateRegistry } from '@tempalace/core'
 import { parse } from 'yaml'
 import { registry } from '../src/registry.js'
-import { banknoteProposalLint, chapterConformance, reportCompression, scenarioSalience } from '../src/tasks/index.js'
+import { banknoteProposalLint, chapterConformance, reportCompression, diegeticSalience } from '../src/tasks/index.js'
 import { stringifyYaml } from '../src/util.js'
 import { analysisOutputEmit } from '../src/prompts.js'
 
-const tasks = [reportCompression, banknoteProposalLint, scenarioSalience, chapterConformance]
-const registeredTasks = [reportCompression, banknoteProposalLint, scenarioSalience]
+const tasks = [reportCompression, banknoteProposalLint, diegeticSalience, chapterConformance]
+const registeredTasks = [reportCompression, banknoteProposalLint, diegeticSalience]
 
 test('all built-in examples satisfy their composed contracts', () => {
   for (const task of tasks) {
@@ -28,11 +28,11 @@ test('schema templates emit parseable draft 2020-12 schemas', async () => {
 })
 
 test('relational validation rejects unknown recommendations and incorrect summaries', () => {
-  const audit = structuredClone(scenarioSalience.definition.exampleAudit) as any
+  const audit = structuredClone(diegeticSalience.definition.exampleAudit) as any
   audit.findings.SS001.recommendation = 'B'
   audit.summary.findings.total = 4
 
-  const result = scenarioSalience.validateAudit(audit)
+  const result = diegeticSalience.validateAudit(audit)
   assert.equal(result.success, false)
   if (!result.success) {
     assert(result.issues.some(issue => issue.includes('recommendation')))
@@ -41,19 +41,19 @@ test('relational validation rejects unknown recommendations and incorrect summar
 })
 
 test('every finding requires a non-empty verbatim excerpt', () => {
-  const audit = structuredClone(scenarioSalience.definition.exampleAudit) as any
+  const audit = structuredClone(diegeticSalience.definition.exampleAudit) as any
   delete audit.findings.SS001.excerpt
 
-  const result = scenarioSalience.validateAudit(audit)
+  const result = diegeticSalience.validateAudit(audit)
   assert.equal(result.success, false)
   if (!result.success) assert(result.issues.some(issue => issue.includes('findings.SS001.excerpt')))
 })
 
 test('findings reject the replaced current field', () => {
-  const audit = structuredClone(scenarioSalience.definition.exampleAudit) as any
+  const audit = structuredClone(diegeticSalience.definition.exampleAudit) as any
   audit.findings.SS001.current = audit.findings.SS001.excerpt
 
-  const result = scenarioSalience.validateAudit(audit)
+  const result = diegeticSalience.validateAudit(audit)
   assert.equal(result.success, false)
   if (!result.success)
     assert(
@@ -93,7 +93,7 @@ test('YAML validation uses the same composed contract', () => {
 })
 
 test('manual analysis prompt is neutral, nested, and non-authorizing', async () => {
-  const prompt = await scenarioSalience.templates.analyze.run({
+  const prompt = await diegeticSalience.templates.analyze.run({
     inputs: 'scenario.md is the target.',
     output: 'Emit YAML.',
     decisionMode: 'manual',
@@ -110,7 +110,7 @@ test('manual analysis prompt is neutral, nested, and non-authorizing', async () 
 
 test('safe decisions are available only for scenario salience', async () => {
   assert.equal(
-    scenarioSalience.templates.analyze.input.safeParse({
+    diegeticSalience.templates.analyze.input.safeParse({
       inputs: 'x',
       decisionMode: 'safe',
       output: analysisOutputEmit,
@@ -134,7 +134,7 @@ test('safe decisions are available only for scenario salience', async () => {
     false
   )
 
-  const prompt = await scenarioSalience.templates.analyze.run({
+  const prompt = await diegeticSalience.templates.analyze.run({
     inputs: 'scenario.md',
     output: 'Emit YAML.',
     decisionMode: 'safe',
@@ -161,9 +161,9 @@ test('application prompt applies decisions without discovering findings', async 
 test('task application templates retain their parameterized interfaces', async () => {
   const scenarioFix = template({
     name: 'scenario fix',
-    input: scenarioSalience.templates.apply.input,
-    output: scenarioSalience.templates.apply.output,
-    run: input => scenarioSalience.templates.apply.run(input),
+    input: diegeticSalience.templates.apply.input,
+    output: diegeticSalience.templates.apply.output,
+    run: input => diegeticSalience.templates.apply.run(input),
   })
 
   const prompt = await scenarioFix.run({
@@ -178,8 +178,8 @@ test('task application templates retain their parameterized interfaces', async (
 test('task schema templates retain their inputless interfaces', async () => {
   const renderedSchema = template({
     name: 'scenario schema',
-    output: scenarioSalience.templates.schema.output,
-    run: () => scenarioSalience.templates.schema.run(),
+    output: diegeticSalience.templates.schema.output,
+    run: () => diegeticSalience.templates.schema.run(),
   })
 
   const source = await renderedSchema.run()
@@ -197,8 +197,8 @@ test('preventative templates render inputless generation policies', async () => 
 
   const scenarioPolicy = template({
     name: 'scenario prevention',
-    output: scenarioSalience.templates.prevent.output,
-    run: () => scenarioSalience.templates.prevent.run(),
+    output: diegeticSalience.templates.prevent.output,
+    run: () => diegeticSalience.templates.prevent.run(),
   })
   const prompt = await scenarioPolicy.run()
   assert.match(prompt, /^### Salience risks/m)

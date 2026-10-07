@@ -1,4 +1,4 @@
-import { banknoteProposalLint, reportCompression, scenarioSalience } from './tasks/index.js'
+import { banknoteProposalLint, reportCompression, diegeticSalience } from './tasks/index.js'
 
 export const registry = {
   'report-compression.analyze': reportCompression.templates.analyze,
@@ -9,10 +9,10 @@ export const registry = {
   'banknote-proposal-lint.apply': banknoteProposalLint.templates.apply,
   'banknote-proposal-lint.prevent': banknoteProposalLint.templates.prevent,
   'banknote-proposal-lint.schema': banknoteProposalLint.templates.schema,
-  'scenario-salience.analyze': scenarioSalience.templates.analyze,
-  'scenario-salience.apply': scenarioSalience.templates.apply,
-  'scenario-salience.prevent': scenarioSalience.templates.prevent,
-  'scenario-salience.schema': scenarioSalience.templates.schema,
+  'scenario-salience.analyze': diegeticSalience.templates.analyze,
+  'scenario-salience.apply': diegeticSalience.templates.apply,
+  'scenario-salience.prevent': diegeticSalience.templates.prevent,
+  'scenario-salience.schema': diegeticSalience.templates.schema,
 } as const
 
 export default registry

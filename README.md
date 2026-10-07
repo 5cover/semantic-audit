@@ -17,23 +17,23 @@ The package includes three faithful tasks derived from real workflows:
 
 - `reportCompression`: editorial and PDF-layout compression for a Typst apprenticeship report;
 - `banknoteProposalLint`: specification lint for a recto-verso banknote series intended for image generation;
-- `scenarioSalience`: semantic-salience review for an annotated Markdown scenario used for chapter generation.
+- `diegeticSalience`: semantic-salience review for an annotated Markdown diegetic document.
 
 The Power Apps and general static-analysis prompts that informed the evidence model are not built-in tasks because they do not yet use the decision artifact and application phase.
 
 ```ts
-import { scenarioSalience } from 'semantic-audit/tasks'
+import { diegeticSalience } from 'semantic-audit/tasks'
 
-const prompt = await scenarioSalience.templates.analyze.run({
+const prompt = await diegeticSalience.templates.analyze.run({
   inputs: 'Audit scenario.md. Use style.md as a reference.',
   decisionMode: 'manual',
   output: 'Emit the audit YAML only.',
 })
 
-const preventionPolicy = await scenarioSalience.templates.prevent.run()
+const preventionPolicy = await diegeticSalience.templates.prevent.run()
 ```
 
-Only `scenarioSalience` supports `decisionMode: "safe"`. In that opt-in mode, the analysis may copy a safe recommendation option key into `decision`. There is no separate `auto_apply` field.
+Only `diegeticSalience` supports `decisionMode: "safe"`. In that opt-in mode, the analysis may copy a safe recommendation option key into `decision`. There is no separate `auto_apply` field.
 
 ## Validation
 
